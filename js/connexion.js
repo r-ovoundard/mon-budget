@@ -130,3 +130,9 @@ document.getElementById('forgot-link').addEventListener('click', (event) => {
   loginAlert.classList.add('info');
   loginAlert.textContent = 'La réinitialisation arrivera avec la version serveur. En attendant, créez un nouveau compte.';
 });
+/* =========================================================
+   DÉJÀ CONNECTÉ : direction le tableau de bord
+   ========================================================= */
+if (getCurrentUser()) {
+  window.location.replace('index.html');
+}

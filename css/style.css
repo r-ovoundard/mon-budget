@@ -2350,3 +2350,42 @@ input[type="month"] {
     animation: none !important;
   }
 }
+/* =========================================================
+   MENU – UTILISATEUR CONNECTÉ
+   ========================================================= */
+@keyframes avatarPop {
+  from { transform: scale(0) rotate(-180deg); }
+  to   { transform: none; }
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.nav-avatar {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  animation: avatarPop 0.6s var(--spring) both;
+}
+
+.nav-auth button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  background: none;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}

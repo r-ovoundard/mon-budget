@@ -86,3 +86,33 @@ function logoutUser() {
   sessionStorage.removeItem(AUTH_SESSION_KEY);
   localStorage.removeItem(AUTH_SESSION_KEY);
 }
+
+/* =========================================================
+   MENU : "Bonjour, Prénom" + Déconnexion quand on est connecté
+   ========================================================= */
+function renderAuthNav() {
+  const user = getCurrentUser();
+  const navAuth = document.querySelector('.nav-auth');
+  if (!user || !navAuth) return;
+
+  const firstName = user.name.split(' ')[0];
+
+  // textContent (et non innerHTML) : un nom contenant du HTML ne sera jamais interprété
+  const greeting = document.createElement('span');
+  greeting.className = 'nav-user';
+  const avatar = document.createElement('span');
+  avatar.className = 'nav-avatar';
+  avatar.textContent = firstName.charAt(0).toUpperCase();
+  greeting.append(avatar, `Bonjour, ${firstName}`);
+
+  const logoutBtn = document.createElement('button');
+  logoutBtn.type = 'button';
+  logoutBtn.className = 'btn-ghost';
+  logoutBtn.textContent = 'Déconnexion';
+  logoutBtn.addEventListener('click', () => {
+    logoutUser();
+    window.location.href = 'connexion.html';
+  });
+
+  navAuth.replaceChildren(greeting, logoutBtn);
+}
