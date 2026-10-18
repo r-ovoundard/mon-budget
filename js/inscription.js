@@ -256,6 +256,6 @@ signupForm.addEventListener('submit', async (event) => {
 /* =========================================================
    DÉJÀ CONNECTÉ : pas besoin de s'inscrire
    ========================================================= */
-if (getCurrentUser()) {
-  window.location.replace('index.html');
-}
+getCurrentUser().then((user) => {
+  if (user) window.location.replace('index.html');
+});

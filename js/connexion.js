@@ -133,6 +133,7 @@ document.getElementById('forgot-link').addEventListener('click', (event) => {
 /* =========================================================
    DÉJÀ CONNECTÉ : direction le tableau de bord
    ========================================================= */
-if (getCurrentUser()) {
-  window.location.replace('index.html');
-}
+// On attend la réponse du serveur avant de décider
+getCurrentUser().then((user) => {
+  if (user) window.location.replace('index.html');
+});

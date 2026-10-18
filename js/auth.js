@@ -1,104 +1,92 @@
 /* =========================================================
-   COMPTES ET SESSION (version sans serveur)
-   ⚠ Démonstration : les comptes sont stockés dans le navigateur.
-   Une vraie appli vérifierait le mot de passe sur un serveur (PHP…).
-   On ne stocke jamais le mot de passe lui-même, seulement son empreinte.
+   COMPTES ET SESSION – VERSION SERVEUR (PHP + MySQL)
+   Les comptes sont enregistrés dans la base de données.
+   Le serveur se souvient de l'utilisateur grâce à un cookie de session.
    ========================================================= */
-const AUTH_ACCOUNTS_KEY = 'monbudget-comptes';
-const AUTH_SESSION_KEY = 'monbudget-session';
 
-function toHex(bytes) {
-  return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, '0')).join('');
-}
+// Envoie une requête à l'API PHP et renvoie la réponse.
+// En cas de problème, lance une erreur avec le message du serveur.
+async function apiRequest(path, options = {}) {
+  const response = await fetch(`api/${path}`, {
+    method: options.method || 'GET',
+    headers: options.body ? { 'Content-Type': 'application/json' } : {},
+    body: options.body ? JSON.stringify(options.body) : undefined,
+    credentials: 'same-origin', // envoie le cookie de session
+  });
 
-// Un "sel" aléatoire par compte : deux mots de passe identiques
-// donnent des empreintes différentes
-function randomSalt() {
-  return toHex(crypto.getRandomValues(new Uint8Array(16)));
-}
-
-// Empreinte SHA-256 du sel + mot de passe (impossible à inverser)
-async function hashPassword(password, salt) {
-  const data = new TextEncoder().encode(salt + password);
-  return toHex(await crypto.subtle.digest('SHA-256', data));
-}
-
-function getAccounts() {
+  let data;
   try {
-    const accounts = JSON.parse(localStorage.getItem(AUTH_ACCOUNTS_KEY));
-    return Array.isArray(accounts) ? accounts : [];
+    data = await response.json();
   } catch {
-    return [];
+    throw new Error('Le serveur ne répond pas correctement. Est-il lancé ?');
   }
+
+  if (!response.ok || !data.ok) {
+    const error = new Error(data.error || 'Erreur du serveur.');
+    error.field = data.field;     // le champ du formulaire en cause
+    error.status = response.status;
+    throw error;
+  }
+
+  return data;
 }
 
-function saveAccounts(accounts) {
-  localStorage.setItem(AUTH_ACCOUNTS_KEY, JSON.stringify(accounts));
-}
-
+/* ---------- Inscription ---------- */
 async function createAccount(name, email, password, profile = {}) {
-  const accounts = getAccounts();
-  const normalizedEmail = email.trim().toLowerCase();
-
-  if (accounts.some((a) => a.email === normalizedEmail)) {
-    throw new Error('Un compte existe déjà avec cet email.');
-  }
-
-  const salt = randomSalt();
-  const account = {
-    id: crypto.randomUUID(),
-    name: name.trim(),
-    lastName: (profile.lastName || '').trim(),
-    phone: (profile.phone || '').trim(),
-    address: (profile.address || '').trim(),
-    email: normalizedEmail,
-    salt,
-    hash: await hashPassword(password, salt),
-    createdAt: Date.now(),
-  };
-
-  accounts.push(account);
-  saveAccounts(accounts);
-  return account;
+  const data = await apiRequest('register.php', {
+    method: 'POST',
+    body: {
+      firstName: name,
+      lastName: profile.lastName || '',
+      email,
+      phone: profile.phone || '',
+      address: profile.address || '',
+      password,
+    },
+  });
+  return data.user;
 }
 
+/* ---------- Connexion ---------- */
 async function loginUser(email, password, remember) {
-  const account = getAccounts().find((a) => a.email === email.trim().toLowerCase());
-
-  // Même message dans les deux cas : on ne révèle pas si l'email existe
-  if (!account || account.hash !== await hashPassword(password, account.salt)) {
-    throw new Error('Email ou mot de passe incorrect.');
-  }
-
-  const session = JSON.stringify({ id: account.id, name: account.name, email: account.email });
-  // "Se souvenir de moi" : localStorage (reste connecté)
-  // sinon sessionStorage (déconnecté à la fermeture du navigateur)
-  (remember ? localStorage : sessionStorage).setItem(AUTH_SESSION_KEY, session);
-  return account;
+  const data = await apiRequest('login.php', {
+    method: 'POST',
+    body: { email, password, remember },
+  });
+  return data.user;
 }
+
+/* ---------- Qui est connecté ? ----------
+   Une seule question au serveur par page, même si plusieurs scripts la posent */
+let currentUserPromise = null;
 
 function getCurrentUser() {
-  try {
-    return JSON.parse(sessionStorage.getItem(AUTH_SESSION_KEY) || localStorage.getItem(AUTH_SESSION_KEY));
-  } catch {
-    return null;
+  if (!currentUserPromise) {
+    currentUserPromise = apiRequest('me.php')
+      .then((data) => data.user)
+      .catch(() => null); // serveur injoignable : on considère que personne n'est connecté
   }
+  return currentUserPromise;
 }
 
-function logoutUser() {
-  sessionStorage.removeItem(AUTH_SESSION_KEY);
-  localStorage.removeItem(AUTH_SESSION_KEY);
+/* ---------- Déconnexion ---------- */
+async function logoutUser() {
+  try {
+    await apiRequest('logout.php', { method: 'POST' });
+  } finally {
+    currentUserPromise = Promise.resolve(null);
+  }
 }
 
 /* =========================================================
    MENU : "Bonjour, Prénom" + Déconnexion quand on est connecté
    ========================================================= */
-function renderAuthNav() {
-  const user = getCurrentUser();
+async function renderAuthNav() {
+  const user = await getCurrentUser();
   const navAuth = document.querySelector('.nav-auth');
   if (!user || !navAuth) return;
 
-  const firstName = user.name.split(' ')[0];
+  const firstName = user.firstName;
 
   // textContent (et non innerHTML) : un nom contenant du HTML ne sera jamais interprété
   const greeting = document.createElement('span');
@@ -112,12 +100,13 @@ function renderAuthNav() {
   logoutBtn.type = 'button';
   logoutBtn.className = 'btn-ghost';
   logoutBtn.textContent = 'Déconnexion';
-  logoutBtn.addEventListener('click', () => {
-    logoutUser();
+  logoutBtn.addEventListener('click', async () => {
+    await logoutUser();
     window.location.href = 'connexion.html';
   });
 
   navAuth.replaceChildren(greeting, logoutBtn);
 }
+
 // auth.js est dans le <head> : on attend que le menu existe
 document.addEventListener('DOMContentLoaded', renderAuthNav);
