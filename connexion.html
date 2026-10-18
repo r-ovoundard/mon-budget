@@ -56,7 +56,58 @@
       </div>
     </section>
 
-    <!-- FORMULAIRE -->
+       <!-- ===== FORMULAIRE ===== -->
+    <section class="auth-card-wrap">
+      <div class="auth-card" id="auth-card">
+        <h2>Connexion</h2>
+        <p class="auth-sub">Connectez-vous pour retrouver votre budget.</p>
+
+        <form id="login-form" novalidate>
+          <!-- placeholder=" " (un espace) : sert au CSS pour savoir si le champ est vide -->
+          <div class="float-field">
+            <input type="email" id="login-email" placeholder=" " autocomplete="email">
+            <label for="login-email">Adresse email</label>
+            <span class="field-error" id="email-error"></span>
+          </div>
+
+          <div class="float-field has-toggle">
+            <input type="password" id="login-password" placeholder=" " autocomplete="current-password">
+            <label for="login-password">Mot de passe</label>
+            <button type="button" class="eye-btn" id="toggle-password" aria-label="Afficher le mot de passe">
+              <svg class="eye-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                <circle cx="12" cy="12" r="3"/>
+                <line class="eye-slash" x1="4" y1="20" x2="20" y2="4"/>
+              </svg>
+            </button>
+            <span class="field-error" id="password-error"></span>
+          </div>
+
+          <div class="auth-row">
+            <label class="check">
+              <input type="checkbox" id="remember">
+              <span class="check-box"></span>
+              Se souvenir de moi
+            </label>
+            <a href="#" class="auth-link" id="forgot-link">Mot de passe oublié ?</a>
+          </div>
+
+          <p class="form-alert" id="login-alert" role="alert"></p>
+
+          <button type="submit" class="btn-morph" id="login-btn">
+            <span class="btn-label">Se connecter</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <svg class="btn-check" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12.5l4.5 4.5L19 7.5"/>
+            </svg>
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Pas encore de compte ? <a href="inscription.html" class="auth-link">Créer un compte</a>
+        </p>
+      </div>
+    </section>
 
   </main>
 

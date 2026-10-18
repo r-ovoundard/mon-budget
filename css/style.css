@@ -1946,3 +1946,218 @@ input[type="month"] {
   font-weight: 800;
   margin-right: 6px;
 }
+/* =========================================================
+   PAGE CONNEXION – CARTE DU FORMULAIRE
+   ========================================================= */
+@keyframes slideFromRight {
+  from { opacity: 0; transform: translateX(60px); filter: blur(8px); }
+  to   { opacity: 1; transform: none;             filter: blur(0); }
+}
+
+.auth-card-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px; /* donne de la profondeur à l'inclinaison 3D */
+  animation: slideFromRight 1s var(--silk) 0.2s both;
+}
+
+/* Déclare --angle comme un vrai angle, pour pouvoir l'animer */
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spinBorder {
+  to { --angle: 360deg; }
+}
+
+/* Bordure lumineuse qui tourne : un fond uni à l'intérieur (padding-box),
+   un dégradé conique qui tourne sur la bordure (border-box) */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 36px;
+  border: 1px solid transparent;
+  border-radius: 22px;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    conic-gradient(from var(--angle), var(--border) 0deg, var(--accent) 60deg, var(--accent-2) 120deg, var(--border) 180deg) border-box;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+  animation: spinBorder 6s linear infinite;
+  transition: transform 0.3s var(--silk);
+}
+
+.auth-card h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.auth-sub {
+  color: var(--text-muted);
+  margin: 6px 0 28px;
+}
+
+/* =========================================================
+   PAGE CONNEXION – LIBELLÉS FLOTTANTS
+   ========================================================= */
+.float-field {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.float-field input {
+  width: 100%;
+  padding: 22px 16px 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+  transition: border-color 0.4s var(--silk), box-shadow 0.4s var(--silk);
+}
+
+.float-field.has-toggle input {
+  padding-right: 52px; /* laisse la place au bouton œil */
+}
+
+.float-field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.18);
+}
+
+/* Évite le fond jaune/blanc du remplissage automatique du navigateur */
+.float-field input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px var(--bg) inset;
+  -webkit-text-fill-color: var(--text);
+}
+
+.float-field label {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  color: var(--text-muted);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform 0.4s var(--spring), color 0.3s var(--silk);
+}
+
+/* Champ actif ou rempli : le libellé monte et rétrécit */
+.float-field input:focus + label,
+.float-field input:not(:placeholder-shown) + label {
+  transform: translateY(-10px) scale(0.75);
+  color: var(--accent);
+}
+
+.float-field input:not(:focus):not(:placeholder-shown) + label {
+  color: var(--text-muted);
+}
+
+.field-error {
+  display: block;
+  min-height: 1.2em; /* réserve la place : le formulaire ne saute pas */
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--logement);
+}
+
+.float-field.invalid input {
+  border-color: var(--logement);
+}
+
+/* =========================================================
+   PAGE CONNEXION – CASE À COCHER ET LIENS
+   ========================================================= */
+.auth-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 4px 0 16px;
+  font-size: 0.9rem;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* La vraie case est cachée visuellement mais reste utilisable au clavier */
+.check input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.check-box {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  transition: background 0.3s var(--silk), border-color 0.3s var(--silk);
+}
+
+.check-box::after {
+  content: "✓";
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  transform: scale(0);
+  transition: transform 0.4s var(--spring);
+}
+
+.check input:checked + .check-box {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: transparent;
+}
+
+.check input:checked + .check-box::after {
+  transform: scale(1);
+}
+
+.check input:focus-visible + .check-box {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Lien dont le soulignement se dessine au survol */
+.auth-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s var(--silk);
+}
+
+.auth-link:hover {
+  background-size: 100% 1px;
+}
+
+.form-alert {
+  min-height: 1.2em;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--logement);
+}
+
+.form-alert.info {
+  color: var(--accent);
+}
+
+.auth-switch {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
