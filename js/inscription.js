@@ -148,3 +148,114 @@ if (canAnimate) {
     authCard.style.transform = '';
   });
 }
+/* =========================================================
+   VALIDATION
+   ========================================================= */
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Chiffres uniquement (avec un + facultatif au début), de 9 à 15 chiffres
+const PHONE_PATTERN = /^\+?\d{9,15}$/;
+
+function validateSignup() {
+  let valid = true;
+
+  if (nameInput.value.trim().length < 2) {
+    setFieldError(nameInput, nameError, 'Entrez votre prénom (2 lettres minimum).');
+    valid = false;
+  }
+
+  if (lastNameInput.value.trim().length < 2) {
+    setFieldError(lastNameInput, lastNameError, 'Entrez votre nom (2 lettres minimum).');
+    valid = false;
+  }
+
+  if (!EMAIL_PATTERN.test(emailInput.value.trim())) {
+    setFieldError(emailInput, emailError, 'Entrez une adresse email valide.');
+    valid = false;
+  }
+
+  // On retire espaces, points, tirets et parenthèses : "06 12 34 56 78" est accepté
+  const phone = phoneInput.value.replace(/[\s.\-()]/g, '');
+  if (!PHONE_PATTERN.test(phone)) {
+    setFieldError(phoneInput, phoneError, 'Entrez un numéro valide (ex : 06 12 34 56 78).');
+    valid = false;
+  }
+
+  if (addressInput.value.trim().length < 8) {
+    setFieldError(addressInput, addressError, 'Entrez votre adresse complète.');
+    valid = false;
+  }
+
+  // Au moins 8 caractères ET au moins 3 règles sur 4
+  const password = passwordInput.value;
+  if (!RULES.length(password) || checkRules(password) < 3) {
+    setFieldError(passwordInput, passwordError, 'Mot de passe trop faible : 8 caractères et 3 règles minimum.');
+    valid = false;
+  }
+
+  if (!confirmInput.value || confirmInput.value !== password) {
+    setFieldError(confirmInput, confirmError, 'Les mots de passe ne sont pas identiques.');
+    valid = false;
+  }
+
+  if (!termsInput.checked) {
+    termsError.textContent = "Vous devez accepter les conditions d'utilisation.";
+    valid = false;
+  }
+
+  return valid;
+}
+
+/* =========================================================
+   CRÉATION DU COMPTE
+   ========================================================= */
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+signupForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  signupAlert.textContent = '';
+
+  if (!validateSignup()) {
+    wobbleCard();
+    return;
+  }
+
+  signupBtn.classList.add('is-loading');
+
+  try {
+    await Promise.all([
+      createAccount(nameInput.value, emailInput.value, passwordInput.value, {
+        lastName: lastNameInput.value,
+        phone: phoneInput.value,
+        address: addressInput.value,
+      }),
+      wait(800),
+    ]);
+
+    // Connexion automatique juste après l'inscription
+    await loginUser(emailInput.value, passwordInput.value, true);
+
+    signupBtn.classList.replace('is-loading', 'is-success');
+
+    // Signal "inscription réussie" : l'étape 7 y branchera les confettis
+    document.dispatchEvent(new CustomEvent('signup-success'));
+
+    await wait(1800);
+    window.location.href = 'parametres.html'; // pour régler son budget tout de suite
+  } catch (error) {
+    signupBtn.classList.remove('is-loading');
+
+    if (error.message.includes('existe déjà')) {
+      setFieldError(emailInput, emailError, error.message);
+    } else {
+      signupAlert.textContent = error.message;
+    }
+    wobbleCard();
+  }
+});
+
+/* =========================================================
+   DÉJÀ CONNECTÉ : pas besoin de s'inscrire
+   ========================================================= */
+if (getCurrentUser()) {
+  window.location.replace('index.html');
+}

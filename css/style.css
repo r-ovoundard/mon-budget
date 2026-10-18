@@ -2808,3 +2808,53 @@ input[type="month"] {
 .match-icon.ko::after {
   content: "✕";
 }
+/* =========================================================
+   CHAMPS REMPLIS AUTOMATIQUEMENT PAR LE NAVIGATEUR
+   Le libellé remonte aussi quand Edge/Chrome remplit le champ
+   ========================================================= */
+.float-field input:-webkit-autofill + label,
+.float-field input:autofill + label {
+  transform: translateY(-10px) scale(0.75);
+  color: var(--text-muted);
+}
+
+/* Garde notre police au lieu de celle du navigateur */
+.float-field input:-webkit-autofill::first-line {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+}
+/* =========================================================
+   PAGE INSCRIPTION – RESPONSIVE
+   ========================================================= */
+@media (max-width: 480px) {
+  /* Prénom et Nom l'un sous l'autre */
+  .field-pair {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Les règles du mot de passe sur une seule colonne */
+  .rules {
+    grid-template-columns: 1fr;
+  }
+
+  .strength-label {
+    min-width: 70px;
+  }
+}
+
+/* =========================================================
+   PAGE INSCRIPTION – ANIMATIONS EN BOUCLE ARRÊTÉES
+   (même principe que pour la page Connexion)
+   ========================================================= */
+.no-motion .horizon-grid,
+.no-motion .strength-bars span::after {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .horizon-grid,
+  .strength-bars span::after {
+    animation: none !important;
+  }
+}

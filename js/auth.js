@@ -36,7 +36,7 @@ function saveAccounts(accounts) {
   localStorage.setItem(AUTH_ACCOUNTS_KEY, JSON.stringify(accounts));
 }
 
-async function createAccount(name, email, password) {
+async function createAccount(name, email, password, profile = {}) {
   const accounts = getAccounts();
   const normalizedEmail = email.trim().toLowerCase();
 
@@ -48,6 +48,9 @@ async function createAccount(name, email, password) {
   const account = {
     id: crypto.randomUUID(),
     name: name.trim(),
+    lastName: (profile.lastName || '').trim(),
+    phone: (profile.phone || '').trim(),
+    address: (profile.address || '').trim(),
     email: normalizedEmail,
     salt,
     hash: await hashPassword(password, salt),
@@ -116,3 +119,5 @@ function renderAuthNav() {
 
   navAuth.replaceChildren(greeting, logoutBtn);
 }
+// auth.js est dans le <head> : on attend que le menu existe
+document.addEventListener('DOMContentLoaded', renderAuthNav);
