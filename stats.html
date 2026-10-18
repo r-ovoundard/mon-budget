@@ -28,9 +28,39 @@
 
   <main class="container">
 
-    <!-- TITRE -->
+        <!-- ===== TITRE ET PÉRIODE ===== -->
+    <section class="stats-header">
+      <div>
+        <h1>Mes statistiques 📊</h1>
+        <p class="subtitle">Analysez vos dépenses et comparez-les à la répartition conseillée.</p>
+      </div>
+      <div class="period">
+        <label for="period">Période</label>
+        <input type="month" id="period">
+        <!-- EXPORT -->
+      </div>
+    </section>
 
-    <!-- INDICATEURS -->
+    <!-- ===== INDICATEURS ===== -->
+    <section class="kpis">
+      <article class="kpi">
+        <span class="kpi-label">Total du mois</span>
+        <strong class="kpi-value" id="kpi-total">0,00 €</strong>
+      </article>
+      <article class="kpi">
+        <span class="kpi-label">Moyenne par jour</span>
+        <strong class="kpi-value" id="kpi-average">0,00 €</strong>
+      </article>
+      <article class="kpi">
+        <span class="kpi-label">Évolution vs mois précédent</span>
+        <strong class="kpi-value" id="kpi-trend">—</strong>
+      </article>
+      <article class="kpi">
+        <span class="kpi-label">Plus grosse dépense</span>
+        <strong class="kpi-value" id="kpi-biggest">—</strong>
+        <span class="kpi-sub" id="kpi-biggest-label"></span>
+      </article>
+    </section>
 
     <!-- GRAPHIQUES -->
 
