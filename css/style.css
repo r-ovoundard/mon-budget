@@ -96,3 +96,37 @@ body {
   background: var(--accent);
   color: #fff;
 }
+/* =========================================================
+   CARTE PRINCIPALE
+   ========================================================= */
+.container {
+  max-width: 1000px;
+  margin: 56px auto;
+  padding: 0 24px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 48px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  margin: 10px 0 44px;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
