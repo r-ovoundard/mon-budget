@@ -111,3 +111,50 @@ document.getElementById('split-reset').addEventListener('click', () => {
 });
 
 fillSliders(appSettings.recommended);
+/* =========================================================
+   COULEURS DES CATÉGORIES
+   ========================================================= */
+const colorInputs = document.querySelectorAll('.swatch input[type="color"]');
+
+function fillColors() {
+  colorInputs.forEach((input) => {
+    input.value = appSettings.colors[input.dataset.category];
+  });
+}
+
+colorInputs.forEach((input) => {
+  // "input" : la page change de couleur en direct pendant qu'on choisit
+  input.addEventListener('input', () => {
+    appSettings.colors[input.dataset.category] = input.value;
+    applySettings();
+  });
+
+  // "change" : on enregistre quand le sélecteur se ferme
+  input.addEventListener('change', () => {
+    saveSettings();
+    showToast('Couleur enregistrée');
+  });
+});
+
+document.getElementById('colors-reset').addEventListener('click', () => {
+  appSettings.colors = { ...DEFAULT_SETTINGS.colors };
+  applySettings();
+  saveSettings();
+  fillColors();
+  showToast('Couleurs par défaut rétablies');
+});
+
+fillColors();
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+const animationsToggle = document.getElementById('animations-toggle');
+animationsToggle.checked = appSettings.animations;
+
+animationsToggle.addEventListener('change', () => {
+  appSettings.animations = animationsToggle.checked;
+  applySettings();
+  saveSettings();
+  showToast(appSettings.animations ? 'Animations activées' : 'Animations réduites');
+});
