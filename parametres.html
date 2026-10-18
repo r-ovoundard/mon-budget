@@ -29,9 +29,29 @@
 
   <main class="container settings-page">
 
-    <!-- TITRE -->
+      <!-- ===== TITRE ===== -->
+    <section class="settings-header">
+      <h1>Paramètres ⚙️</h1>
+      <p class="subtitle">Personnalisez votre budget et votre application.</p>
+    </section>
 
-    <!-- BUDGET -->
+    <!-- ===== BUDGET MENSUEL ===== -->
+    <section class="setting-section">
+      <header class="setting-head">
+        <span class="setting-icon">💰</span>
+        <div>
+          <h2>Budget mensuel</h2>
+          <p>Le montant que vous prévoyez de dépenser chaque mois.</p>
+        </div>
+      </header>
+      <form class="budget-form" id="budget-form">
+        <div class="input-money">
+          <input type="number" id="budget-input" min="0" step="10" placeholder="800" aria-label="Budget mensuel en euros">
+          <span>€ / mois</span>
+        </div>
+        <button type="submit" class="btn-shine">Enregistrer</button>
+      </form>
+    </section>
 
     <!-- RÉPARTITION -->
 

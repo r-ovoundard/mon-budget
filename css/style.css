@@ -1082,3 +1082,186 @@ input[type="month"] {
     height: 240px;
   }
 }
+/* =========================================================
+   PAGE PARAMÈTRES – ANIMATIONS
+   ========================================================= */
+:root {
+  --silk: cubic-bezier(0.16, 1, 0.3, 1); /* départ rapide, arrivée très douce */
+}
+
+/* Les lettres se resserrent en passant du flou au net */
+@keyframes titleIn {
+  from { opacity: 0; letter-spacing: 0.3em; filter: blur(6px); }
+  to   { opacity: 1; letter-spacing: 0;     filter: blur(0); }
+}
+
+/* Le bloc se déplie de haut en bas, comme un rideau */
+@keyframes unfold {
+  from { opacity: 0; -webkit-clip-path: inset(0 0 100% 0 round 18px); clip-path: inset(0 0 100% 0 round 18px); transform: translateY(-10px); }
+  to   { opacity: 1; -webkit-clip-path: inset(0 0 0 0 round 18px); clip-path: inset(0 0 0 0 round 18px);    transform: none; }
+}
+
+/* L'icône pivote et grossit avec un effet ressort */
+@keyframes iconIn {
+  from { opacity: 0; transform: rotate(-90deg) scale(0.4); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   PAGE PARAMÈTRES – STRUCTURE
+   ========================================================= */
+.container.settings-page {
+  max-width: 820px;
+}
+
+.settings-header {
+  margin-bottom: 36px;
+}
+
+.settings-header h1 {
+  animation: titleIn 1s var(--silk) both;
+}
+
+.settings-header .subtitle {
+  margin: 10px 0 0;
+  animation: titleIn 1s var(--silk) 0.15s both;
+}
+
+.setting-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 24px;
+  /* "backwards" : le découpage disparaît à la fin, sinon il couperait le halo du survol */
+  animation: unfold 0.9s var(--silk) backwards;
+  transition: border-color 0.5s var(--silk), box-shadow 0.5s var(--silk);
+}
+
+/* Les sections se déplient l'une après l'autre */
+.setting-section:nth-of-type(2) { animation-delay: 0.10s; }
+.setting-section:nth-of-type(3) { animation-delay: 0.20s; }
+.setting-section:nth-of-type(4) { animation-delay: 0.30s; }
+.setting-section:nth-of-type(5) { animation-delay: 0.40s; }
+.setting-section:nth-of-type(6) { animation-delay: 0.50s; }
+
+.setting-section:hover {
+  border-color: rgba(124, 92, 255, 0.5);
+  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.08);
+}
+
+.setting-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.setting-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(79, 140, 255, 0.25), rgba(124, 92, 255, 0.25));
+  font-size: 1.3rem;
+  animation: iconIn 0.8s var(--spring) both;
+  animation-delay: inherit; /* même délai que sa section */
+}
+
+.setting-head h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.setting-head p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+/* =========================================================
+   PAGE PARAMÈTRES – BUDGET
+   ========================================================= */
+.budget-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.input-money {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 0.4s var(--silk), box-shadow 0.4s var(--silk);
+}
+
+.input-money:focus-within {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.2);
+}
+
+.input-money input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.input-money span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Bouton avec un reflet lumineux qui le traverse au survol */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.4s var(--spring), box-shadow 0.4s var(--silk);
+}
+
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.8s var(--silk);
+}
+
+.btn-shine:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(124, 92, 255, 0.4);
+}
+
+.btn-shine:hover::after {
+  left: 130%;
+}
+
+.btn-shine:active {
+  transform: scale(0.97);
+}
