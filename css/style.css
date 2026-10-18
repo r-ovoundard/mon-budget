@@ -691,3 +691,42 @@ input[type="month"] {
 .expense-form.is-editing .field select {
   border-color: var(--etudes);
 }
+/* =========================================================
+   PAGE DÉPENSES – RESPONSIVE
+   ========================================================= */
+@media (max-width: 760px) {
+  .summary {
+    grid-template-columns: 1fr;
+  }
+
+  .expense-form {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-submit {
+    justify-self: stretch;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .filters input,
+  .filters select {
+    flex: 1 1 140px;
+  }
+}
+
+/* Respecte le réglage "réduire les animations" du système.
+   On raccourcit les animations au lieu de les supprimer, pour que
+   l'événement "animationend" (utilisé pour supprimer) se déclenche quand même. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
