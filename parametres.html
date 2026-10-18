@@ -104,16 +104,103 @@
         <button type="button" class="btn-soft" id="split-reset">Rétablir les valeurs par défaut</button>
       </div>
     </section>
+    <!-- ===== COULEURS DES CATÉGORIES ===== -->
+    <section class="setting-section">
+      <header class="setting-head">
+        <span class="setting-icon">🎨</span>
+        <div>
+          <h2>Couleurs des catégories</h2>
+          <p>Choisissez la couleur de chaque catégorie, appliquée sur tout le site.</p>
+        </div>
+      </header>
+      <div class="swatches">
+        <label class="swatch">
+          <input type="color" data-category="logement" value="#e76f51">
+          <span>Logement</span>
+        </label>
+        <label class="swatch">
+          <input type="color" data-category="alimentation" value="#f4a261">
+          <span>Alimentation</span>
+        </label>
+        <label class="swatch">
+          <input type="color" data-category="etudes" value="#2a9d8f">
+          <span>Études</span>
+        </label>
+        <label class="swatch">
+          <input type="color" data-category="transport" value="#8ab17d">
+          <span>Transport</span>
+        </label>
+        <label class="swatch">
+          <input type="color" data-category="loisirs" value="#e9c46a">
+          <span>Loisirs</span>
+        </label>
+        <label class="swatch">
+          <input type="color" data-category="divers" value="#b5838d">
+          <span>Divers</span>
+        </label>
+      </div>
+      <button type="button" class="btn-soft" id="colors-reset">Couleurs par défaut</button>
+    </section>
 
-    <!-- CATÉGORIES -->
+    <!-- ===== APPARENCE ===== -->
+    <section class="setting-section">
+      <header class="setting-head">
+        <span class="setting-icon">✨</span>
+        <div>
+          <h2>Apparence</h2>
+          <p>Réglez le confort d'affichage.</p>
+        </div>
+      </header>
+      <label class="toggle-row" for="animations-toggle">
+        <div>
+          <strong>Animations</strong>
+          <p>Désactivez-les pour un affichage plus sobre et plus rapide.</p>
+        </div>
+        <input type="checkbox" id="animations-toggle" class="toggle" checked>
+      </label>
+    </section>
 
-    <!-- APPARENCE -->
-
-    <!-- DONNÉES -->
+    <!-- ===== DONNÉES ===== -->
+    <section class="setting-section danger-zone">
+      <header class="setting-head">
+        <span class="setting-icon">🗂️</span>
+        <div>
+          <h2>Données</h2>
+          <p>Sauvegardez, restaurez ou effacez vos dépenses.</p>
+        </div>
+      </header>
+      <div class="data-actions">
+        <button type="button" class="btn-soft" id="export-json">⬇ Exporter une sauvegarde</button>
+        <label class="btn-soft file-btn">
+          ⬆ Importer une sauvegarde
+          <input type="file" id="import-json" accept=".json,application/json" hidden>
+        </label>
+        <button type="button" class="btn-danger" id="clear-data">🗑 Tout effacer</button>
+      </div>
+    </section>
 
   </main>
 
-  <!-- TOAST -->
+   <!-- ===== NOTIFICATION ===== -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-icon" id="toast-icon">✓</span>
+    <span id="toast-text">Paramètres enregistrés</span>
+    <span class="toast-bar"></span>
+  </div>
+
+  <!-- ===== FENÊTRE DE CONFIRMATION ===== -->
+  <dialog class="modal" id="confirm-dialog">
+    <!-- method="dialog" : chaque bouton ferme la fenêtre en donnant sa "value" -->
+    <form method="dialog">
+      <span class="modal-icon">⚠️</span>
+      <h3>Tout effacer ?</h3>
+      <p>Toutes vos dépenses seront supprimées définitivement. Pensez à exporter une sauvegarde avant.</p>
+      <div class="modal-actions">
+        <button value="cancel" class="btn-soft">Annuler</button>
+        <button value="confirm" class="btn-danger">Oui, tout effacer</button>
+      </div>
+    </form>
+  </dialog>
 
   <!-- SCRIPTS -->
 
