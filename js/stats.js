@@ -182,3 +182,54 @@ document.querySelectorAll('.kpi').forEach((card) => {
 
 // Premier affichage une fois tout le fichier lu (y compris les étapes suivantes)
 document.addEventListener('DOMContentLoaded', render);
+/* =========================================================
+   GRAPHIQUE EN CAMEMBERT
+   ========================================================= */
+Chart.defaults.color = color('text-muted');
+Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+Chart.defaults.animation.duration = reduceMotion ? 0 : 1200;
+
+const categoryKeys = Object.keys(CATEGORIES);
+const donutTotal = document.getElementById('donut-total');
+
+const donutChart = new Chart(document.getElementById('donut-chart'), {
+  type: 'doughnut',
+  data: {
+    labels: categoryKeys.map((key) => CATEGORIES[key]),
+    datasets: [{
+      data: categoryKeys.map(() => 0),
+      backgroundColor: categoryKeys.map((key) => color(key)),
+      borderColor: color('panel'), // sépare les parts avec la couleur du fond
+      borderWidth: 3,
+      hoverOffset: 12,             // la part survolée se détache
+    }],
+  },
+  options: {
+    maintainAspectRatio: false,
+    cutout: '68%',
+    animation: {
+      animateRotate: true, // se dessine en tournant
+      animateScale: true,  // et en grandissant depuis le centre
+      easing: 'easeOutQuart',
+    },
+    plugins: {
+      legend: { display: false }, // le détail par catégorie sert de légende
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ` ${ctx.label} : ${euro.format(ctx.parsed)}`,
+        },
+      },
+    },
+  },
+});
+
+function renderDonut(month) {
+  const current = expensesOf(month);
+  donutChart.data.datasets[0].data = categoryKeys.map(
+    (key) => sum(current.filter((e) => e.category === key)),
+  );
+  donutChart.update();
+  countUp(donutTotal, sum(current), euro.format);
+}
+
+renderers.push(renderDonut);
