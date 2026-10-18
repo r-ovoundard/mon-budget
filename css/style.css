@@ -233,3 +233,38 @@ h1 {
 .txt-transport    { color: var(--transport); }
 .txt-loisirs      { color: var(--loisirs); }
 .txt-divers       { color: var(--divers); }
+/* =========================================================
+   CONSEILS CLÉS
+   ========================================================= */
+.tips {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* --tip-color est défini par chaque classe .tip-N ci-dessous,
+   ce qui évite de répéter les règles pour chaque conseil */
+.tip {
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 4px solid var(--tip-color);
+}
+
+.tip strong {
+  color: var(--tip-color);
+  font-weight: 700;
+}
+
+.tip p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.tip-1 { --tip-color: var(--tip-1); }
+.tip-2 { --tip-color: var(--tip-2); }
+.tip-3 { --tip-color: var(--tip-3); }
+.tip-4 { --tip-color: var(--tip-4); }
+.tip-5 { --tip-color: var(--tip-5); }
