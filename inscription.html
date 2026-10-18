@@ -129,7 +129,32 @@
             <span class="field-error" id="password-error"></span>
           </div>
 
-          <!-- FORCE -->
+                    <!-- ===== FORCE DU MOT DE PASSE ===== -->
+          <div class="strength" id="strength" data-level="0">
+            <div class="strength-bars">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <span class="strength-label" id="strength-label">Saisissez un mot de passe</span>
+          </div>
+
+          <ul class="rules" id="rules">
+            <li data-rule="length">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+              8 caractères minimum
+            </li>
+            <li data-rule="upper">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+              Une majuscule
+            </li>
+            <li data-rule="digit">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+              Un chiffre
+            </li>
+            <li data-rule="special">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+              Un caractère spécial
+            </li>
+          </ul>
 
           <div class="float-field has-toggle">
             <input type="password" id="signup-confirm" placeholder=" " autocomplete="new-password">

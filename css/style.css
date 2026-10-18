@@ -2627,3 +2627,184 @@ input[type="month"] {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* =========================================================
+   PAGE INSCRIPTION – INDICATEUR DE FORCE "LIQUIDE"
+   data-level (0 à 4) est mis à jour par le JS
+   ========================================================= */
+.strength {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0 12px;
+}
+
+/* Chaque niveau a sa couleur, transmise aux segments */
+.strength[data-level="1"] { --level-color: var(--logement); }
+.strength[data-level="2"] { --level-color: var(--alimentation); }
+.strength[data-level="3"] { --level-color: var(--loisirs); }
+.strength[data-level="4"] { --level-color: var(--tip-4); }
+
+.strength-bars {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.strength-bars span {
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--bg);
+}
+
+/* Le liquide : un dégradé avec un reflet qui circule */
+@keyframes liquid {
+  to { background-position: -200% 0; }
+}
+
+.strength-bars span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg,
+    var(--level-color, var(--border)),
+    color-mix(in srgb, var(--level-color, var(--border)) 55%, #fff),
+    var(--level-color, var(--border)));
+  background-size: 200% 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--silk);
+  animation: liquid 2s linear infinite;
+}
+
+/* Les segments se remplissent l'un après l'autre */
+.strength-bars span:nth-child(2)::after { transition-delay: 0.08s; }
+.strength-bars span:nth-child(3)::after { transition-delay: 0.16s; }
+.strength-bars span:nth-child(4)::after { transition-delay: 0.24s; }
+
+/* Niveau N : les N premiers segments sont pleins */
+.strength[data-level="1"] span:nth-child(-n+1)::after,
+.strength[data-level="2"] span:nth-child(-n+2)::after,
+.strength[data-level="3"] span:nth-child(-n+3)::after,
+.strength[data-level="4"] span:nth-child(-n+4)::after {
+  transform: scaleX(1);
+}
+
+.strength-label {
+  min-width: 90px;
+  text-align: right;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--level-color, var(--text-muted));
+  transition: color 0.4s var(--silk);
+}
+
+/* =========================================================
+   PAGE INSCRIPTION – RÈGLES QUI SE COCHENT
+   ========================================================= */
+@keyframes ruleBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.rules {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  margin-bottom: 16px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.rules li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.4s var(--silk);
+}
+
+.rules svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rules circle {
+  stroke: var(--border);
+  transition: stroke 0.4s, fill 0.4s;
+}
+
+/* La coche est "cachée" en décalant son trait, puis dessinée */
+.rules path {
+  stroke: var(--bg);
+  stroke-dasharray: 12;
+  stroke-dashoffset: 12;
+  transition: stroke-dashoffset 0.4s var(--silk) 0.1s;
+}
+
+.rules li.ok {
+  color: var(--text);
+}
+
+.rules li.ok circle {
+  stroke: var(--tip-4);
+  fill: var(--tip-4);
+}
+
+.rules li.ok path {
+  stroke-dashoffset: 0;
+}
+
+.rules li.ok svg {
+  animation: ruleBounce 0.5s var(--spring);
+}
+
+/* =========================================================
+   PAGE INSCRIPTION – ✓ / ✕ DANS LE CHAMP DE CONFIRMATION
+   ========================================================= */
+.match-icon {
+  position: absolute;
+  top: 15px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 800;
+  transform: scale(0) rotate(-180deg);
+  transition: transform 0.5s var(--spring);
+}
+
+.match-icon.ok,
+.match-icon.ko {
+  transform: none;
+}
+
+.match-icon.ok {
+  background: var(--tip-4);
+  color: var(--bg);
+}
+
+.match-icon.ok::after {
+  content: "✓";
+}
+
+.match-icon.ko {
+  background: var(--logement);
+  color: #fff;
+}
+
+.match-icon.ko::after {
+  content: "✕";
+}
