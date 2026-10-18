@@ -518,3 +518,152 @@ input[type="month"] {
 .btn-submit:active {
   transform: translateY(0) scale(0.98);
 }
+/* =========================================================
+   PAGE DÉPENSES – FILTRES ET TABLEAU
+   ========================================================= */
+.list-panel {
+  animation: fadeUp 0.7s var(--ease) 0.45s both;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Annule le soulignement de .panel h3 : ici c'est .list-header qui l'a */
+.list-header h3 {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filters input,
+.filters select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.filters input:focus,
+.filters select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.18);
+}
+
+.table-wrap {
+  overflow-x: auto; /* sur petit écran, le tableau défile au lieu de déborder */
+}
+
+.expense-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+}
+
+.expense-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 10px 12px;
+}
+
+.expense-table td {
+  padding: 14px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.expense-table .right {
+  text-align: right;
+}
+
+.expense-table tbody tr {
+  animation: rowIn 0.5s var(--ease) both;
+  transition: background 0.3s;
+}
+
+.expense-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Ligne en cours de suppression : elle glisse et s'efface */
+.expense-table tbody tr.removing {
+  animation: rowOut 0.4s var(--ease) forwards;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge .dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 0;
+}
+
+.amount {
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.icon-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.3s, border-color 0.3s, transform 0.3s var(--ease);
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.icon-btn.delete:hover {
+  color: var(--logement);
+  border-color: var(--logement);
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 28px 0 8px;
+  animation: fadeUp 0.5s var(--ease) both;
+}

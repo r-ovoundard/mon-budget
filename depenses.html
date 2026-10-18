@@ -84,7 +84,43 @@
       </form>
     </section>
 
-    <!-- LISTE -->
+        <!-- ===== LISTE DES DÉPENSES ===== -->
+    <section class="panel list-panel">
+      <div class="list-header">
+        <h3>Historique</h3>
+        <div class="filters">
+          <input type="month" id="filter-month" aria-label="Filtrer par mois">
+          <select id="filter-category" aria-label="Filtrer par catégorie">
+            <option value="">Toutes les catégories</option>
+            <option value="logement">Logement</option>
+            <option value="alimentation">Alimentation</option>
+            <option value="etudes">Études</option>
+            <option value="transport">Transport</option>
+            <option value="loisirs">Loisirs</option>
+            <option value="divers">Divers</option>
+          </select>
+          <input type="search" id="filter-search" placeholder="Rechercher…" aria-label="Rechercher une dépense">
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="expense-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Catégorie</th>
+              <th class="right">Montant</th>
+              <th class="right">Actions</th>
+            </tr>
+          </thead>
+          <!-- Les lignes sont créées par le JavaScript -->
+          <tbody id="expense-list"></tbody>
+        </table>
+      </div>
+
+      <p class="empty" id="empty-state">Aucune dépense pour le moment. Ajoutez-en une ci-dessus !</p>
+    </section>
 
   </main>
 
