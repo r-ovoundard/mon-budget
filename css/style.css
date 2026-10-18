@@ -1048,3 +1048,37 @@ input[type="month"] {
 .btn-export:disabled::before {
   display: none;
 }
+/* =========================================================
+   PAGE STATISTIQUES – RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  .kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-header {
+    align-items: stretch;
+  }
+
+  .period {
+    flex-wrap: wrap;
+  }
+
+  .period input {
+    flex: 1;
+  }
+
+  .chart-box {
+    height: 240px;
+  }
+}
