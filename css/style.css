@@ -667,3 +667,15 @@ input[type="month"] {
   padding: 28px 0 8px;
   animation: fadeUp 0.5s var(--ease) both;
 }
+/* =========================================================
+   PAGE DÉPENSES – REBOND DES CHIFFRES
+   ========================================================= */
+@keyframes bump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.1); color: var(--accent); }
+  100% { transform: scale(1); }
+}
+
+.bump {
+  animation: bump 0.5s var(--ease);
+}

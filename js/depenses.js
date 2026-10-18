@@ -174,3 +174,40 @@ form.addEventListener('submit', (event) => {
 // Le premier affichage attend que tout le fichier soit lu,
 // pour inclure les fonctions ajoutées aux étapes suivantes
 document.addEventListener('DOMContentLoaded', render);
+/* =========================================================
+   RÉSUMÉ DU MOIS
+   ========================================================= */
+const statTotal = document.getElementById('stat-total');
+const statCount = document.getElementById('stat-count');
+const statTop = document.getElementById('stat-top');
+
+function currentMonth() {
+  return today().slice(0, 7); // AAAA-MM
+}
+
+// Met à jour un chiffre et joue l'animation "rebond" s'il a changé
+function setStat(element, value) {
+  if (element.textContent === value) return;
+  element.textContent = value;
+  element.classList.remove('bump');
+  void element.offsetWidth;
+  element.classList.add('bump');
+}
+
+function renderSummary() {
+  const month = currentMonth();
+  const ofMonth = expenses.filter((e) => e.date.startsWith(month));
+  const total = ofMonth.reduce((sum, e) => sum + e.amount, 0);
+
+  const byCategory = {};
+  for (const e of ofMonth) {
+    byCategory[e.category] = (byCategory[e.category] || 0) + e.amount;
+  }
+  const top = Object.entries(byCategory).sort((a, b) => b[1] - a[1])[0];
+
+  setStat(statTotal, euro.format(total));
+  setStat(statCount, String(ofMonth.length));
+  setStat(statTop, top ? CATEGORIES[top[0]] : '—');
+}
+
+renderers.push(renderSummary);
