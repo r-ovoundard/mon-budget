@@ -299,3 +299,54 @@ function renderBars(month) {
 }
 
 renderers.push(renderBars);
+/* =========================================================
+   DÉTAIL PAR CATÉGORIE
+   Compare la part réelle de chaque catégorie à la part conseillée.
+   ========================================================= */
+const detailList = document.getElementById('detail-list');
+const statsEmpty = document.getElementById('stats-empty');
+
+function renderDetail(month) {
+  const current = expensesOf(month);
+  const total = sum(current);
+
+  statsEmpty.hidden = total > 0;
+  detailList.hidden = total === 0;
+  if (total === 0) return;
+
+  detailList.innerHTML = categoryKeys.map((key) => {
+    const amount = sum(current.filter((e) => e.category === key));
+    const percent = Math.round((amount / total) * 100);
+    const advised = RECOMMENDED[key];
+    const gap = percent - advised;
+
+    const status = gap > 0
+      ? `<span class="over">⚠ +${gap} pts au-dessus</span>`
+      : '<span class="ok">✓ dans la limite</span>';
+
+    return `
+      <li>
+        <div class="detail-top">
+          <span class="detail-name"><span class="dot ${key}"></span>${CATEGORIES[key]}</span>
+          <span class="detail-amount">${euro.format(amount)} · <b>${percent} %</b></span>
+        </div>
+        <div class="progress">
+          <div class="progress-fill ${key}" style="--value: ${Math.min(percent, 100)}%"></div>
+          <div class="progress-marker" style="left: ${advised}%" title="Conseillé : ${advised} %"></div>
+        </div>
+        <p class="detail-hint">Conseillé : ${advised} % ${status}</p>
+      </li>
+    `;
+  }).join('');
+
+  // Deux images d'attente : le navigateur affiche d'abord les barres à 0,
+  // puis la transition les fait grandir l'une après l'autre
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    detailList.querySelectorAll('.progress-fill').forEach((bar, i) => {
+      bar.style.transitionDelay = `${i * 90}ms`;
+      bar.classList.add('filled');
+    });
+  }));
+}
+
+renderers.push(renderDetail);
