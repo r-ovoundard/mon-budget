@@ -164,3 +164,72 @@ h1 {
 .transport    { background: var(--transport); }
 .loisirs      { background: var(--loisirs); }
 .divers       { background: var(--divers); }
+/* =========================================================
+   COLONNES
+   ========================================================= */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.panel h3 {
+  font-size: 1.1rem;
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* =========================================================
+   LÉGENDE DES DÉPENSES
+   ========================================================= */
+.legend {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.legend li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.dot {
+  flex-shrink: 0; /* empêche la pastille de s'écraser si le texte est long */
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-top: 5px; /* aligne la pastille sur la première ligne de texte */
+}
+
+.legend strong {
+  display: block;
+  font-weight: 700;
+}
+
+.legend em {
+  font-style: normal;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.legend p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.txt-logement     { color: var(--logement); }
+.txt-alimentation { color: var(--alimentation); }
+.txt-etudes       { color: var(--etudes); }
+.txt-transport    { color: var(--transport); }
+.txt-loisirs      { color: var(--loisirs); }
+.txt-divers       { color: var(--divers); }
