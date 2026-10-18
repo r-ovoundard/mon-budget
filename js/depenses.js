@@ -276,3 +276,21 @@ form.addEventListener('keydown', (event) => {
     clearErrors();
   }
 });
+/* =========================================================
+   FILTRES ET RECHERCHE
+   ========================================================= */
+const filterMonth = document.getElementById('filter-month');
+const filterCategory = document.getElementById('filter-category');
+const filterSearch = document.getElementById('filter-search');
+
+filterMonth.value = currentMonth(); // par défaut : le mois en cours
+
+filters.push(
+  (e) => !filterMonth.value || e.date.startsWith(filterMonth.value),
+  (e) => !filterCategory.value || e.category === filterCategory.value,
+  (e) => e.description.toLowerCase().includes(filterSearch.value.trim().toLowerCase()),
+);
+
+filterMonth.addEventListener('change', renderList);
+filterCategory.addEventListener('change', renderList);
+filterSearch.addEventListener('input', renderList); // filtre à chaque lettre tapée
