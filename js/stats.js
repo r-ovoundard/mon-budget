@@ -233,3 +233,69 @@ function renderDonut(month) {
 }
 
 renderers.push(renderDonut);
+/* =========================================================
+   GRAPHIQUE EN BARRES : 6 DERNIERS MOIS
+   ========================================================= */
+const euroShort = new Intl.NumberFormat('fr-FR', {
+  style: 'currency',
+  currency: 'EUR',
+  maximumFractionDigits: 0,
+});
+
+function monthLabel(month) {
+  const [year, m] = month.split('-').map(Number);
+  return new Date(year, m - 1, 1).toLocaleDateString('fr-FR', { month: 'short' });
+}
+
+const barChart = new Chart(document.getElementById('bar-chart'), {
+  type: 'bar',
+  data: {
+    labels: [],
+    datasets: [{
+      data: [],
+      backgroundColor: [],
+      borderRadius: 8,
+      borderSkipped: false,
+      maxBarThickness: 46,
+    }],
+  },
+  options: {
+    maintainAspectRatio: false,
+    animation: {
+      easing: 'easeOutBack', // la barre dépasse un peu puis se pose
+      // Les barres poussent l'une après l'autre
+      delay: (ctx) => (ctx.type === 'data' && ctx.mode === 'default' ? ctx.dataIndex * 90 : 0),
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        beginAtZero: true,
+        grid: { color: color('border') },
+        ticks: { callback: (value) => euroShort.format(value) },
+      },
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ` ${euro.format(ctx.parsed.y)}`,
+        },
+      },
+    },
+  },
+});
+
+function renderBars(month) {
+  // Les 6 mois qui finissent par le mois choisi
+  const months = Array.from({ length: 6 }, (_, i) => shiftMonth(month, i - 5));
+
+  barChart.data.labels = months.map(monthLabel);
+  barChart.data.datasets[0].data = months.map((m) => sum(expensesOf(m)));
+  // Le mois choisi en violet, les autres en bleu discret
+  barChart.data.datasets[0].backgroundColor = months.map(
+    (m) => (m === month ? color('accent-2') : 'rgba(79, 140, 255, 0.45)'),
+  );
+  barChart.update();
+}
+
+renderers.push(renderBars);
