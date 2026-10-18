@@ -2161,3 +2161,192 @@ input[type="month"] {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
+/* =========================================================
+   PAGE CONNEXION – BOUTON QUI SE TRANSFORME
+   normal → cercle qui tourne (chargement) → coche (succès)
+   ========================================================= */
+.btn-morph {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 52px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: width 0.5s var(--silk), border-radius 0.5s var(--silk), background 0.5s var(--silk),
+              transform 0.3s var(--spring), box-shadow 0.3s var(--silk);
+}
+
+.btn-morph:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(124, 92, 255, 0.4);
+}
+
+.btn-morph.is-loading,
+.btn-morph.is-success {
+  width: 52px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.btn-morph.is-success {
+  background: var(--tip-4);
+}
+
+.btn-label {
+  transition: opacity 0.2s;
+}
+
+.is-loading .btn-label,
+.is-success .btn-label {
+  opacity: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-spinner {
+  position: absolute;
+  inset: 0;
+  width: 22px;
+  height: 22px;
+  margin: auto;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.is-loading .btn-spinner {
+  opacity: 1;
+  animation: spin 0.7s linear infinite;
+}
+
+/* La coche se dessine trait par trait */
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+.btn-check {
+  position: absolute;
+  inset: 0;
+  width: 24px;
+  height: 24px;
+  margin: auto;
+  fill: none;
+  stroke: var(--bg);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+}
+
+.is-success .btn-check {
+  animation: drawCheck 0.5s var(--silk) 0.15s forwards;
+}
+
+/* =========================================================
+   PAGE CONNEXION – BOUTON ŒIL
+   ========================================================= */
+.eye-btn {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.3s, background 0.3s;
+}
+
+.eye-btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-origin: center;
+}
+
+/* La barre se dessine quand le mot de passe est visible */
+.eye-slash {
+  stroke-dasharray: 23;
+  stroke-dashoffset: 23;
+  transition: stroke-dashoffset 0.4s var(--silk);
+}
+
+.eye-btn.visible .eye-slash {
+  stroke-dashoffset: 0;
+}
+
+/* Clignement de l'œil */
+@keyframes blink {
+  50% { transform: scaleY(0.1); }
+}
+
+.eye-btn.blink .eye-icon {
+  animation: blink 0.35s var(--silk);
+}
+
+/* =========================================================
+   PAGE CONNEXION – LA CARTE VACILLE EN CAS D'ERREUR
+   ========================================================= */
+@keyframes wobble {
+  0%, 100% { transform: none; }
+  20%      { transform: translateX(-10px) rotate(-1.5deg); }
+  40%      { transform: translateX(8px) rotate(1deg); }
+  60%      { transform: translateX(-6px) rotate(-0.5deg); }
+  80%      { transform: translateX(3px); }
+}
+
+/* On garde spinBorder dans la liste, sinon la bordure s'arrêterait */
+.auth-card.wobble {
+  animation: spinBorder 6s linear infinite, wobble 0.5s var(--silk);
+}
+
+/* =========================================================
+   PAGE CONNEXION – ANIMATIONS EN BOUCLE ET ACCESSIBILITÉ
+   Les règles "animations réduites" raccourcissent les animations ;
+   pour celles qui tournent en boucle, ça donnerait un clignotement.
+   On les arrête donc complètement.
+   ========================================================= */
+.no-motion .blob,
+.no-motion .auth-logo,
+.no-motion .shine-text,
+.no-motion .rotator-track,
+.no-motion .auth-card,
+.no-motion .btn-spinner {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blob,
+  .auth-logo,
+  .shine-text,
+  .rotator-track,
+  .auth-card,
+  .btn-spinner {
+    animation: none !important;
+  }
+}
