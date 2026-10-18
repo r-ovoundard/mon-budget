@@ -130,3 +130,37 @@ h1 {
   font-weight: 700;
   margin-bottom: 14px;
 }
+/* =========================================================
+   BARRE DU BUDGET
+   ========================================================= */
+.budget-bar {
+  display: flex;
+  height: 40px;
+  border-radius: 999px;
+  overflow: hidden; /* coupe les segments pour suivre les bords arrondis */
+  margin-bottom: 48px;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--bg);
+  white-space: nowrap;
+  transition: filter 0.2s;
+}
+
+.seg:hover {
+  filter: brightness(1.15);
+}
+
+/* Couleurs de fond partagées par les segments et les pastilles */
+.logement     { background: var(--logement); }
+.alimentation { background: var(--alimentation); }
+.etudes       { background: var(--etudes); }
+.transport    { background: var(--transport); }
+.loisirs      { background: var(--loisirs); }
+.divers       { background: var(--divers); }
