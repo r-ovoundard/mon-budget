@@ -53,7 +53,57 @@
       </form>
     </section>
 
-    <!-- RÉPARTITION -->
+       <!-- ===== RÉPARTITION CONSEILLÉE ===== -->
+    <section class="setting-section">
+      <header class="setting-head">
+        <span class="setting-icon">🎯</span>
+        <div>
+          <h2>Répartition conseillée</h2>
+          <p>La part idéale de chaque catégorie dans votre budget. Le total doit faire 100 %.</p>
+        </div>
+      </header>
+
+      <div class="sliders">
+        <div class="slider-row" data-category="logement">
+          <label for="split-logement"><span class="dot logement"></span>Logement</label>
+          <input type="range" id="split-logement" min="0" max="100" step="5" value="45" style="--fill: 45%">
+          <output for="split-logement">45 %</output>
+        </div>
+        <div class="slider-row" data-category="alimentation">
+          <label for="split-alimentation"><span class="dot alimentation"></span>Alimentation</label>
+          <input type="range" id="split-alimentation" min="0" max="100" step="5" value="20" style="--fill: 20%">
+          <output for="split-alimentation">20 %</output>
+        </div>
+        <div class="slider-row" data-category="etudes">
+          <label for="split-etudes"><span class="dot etudes"></span>Études</label>
+          <input type="range" id="split-etudes" min="0" max="100" step="5" value="10" style="--fill: 10%">
+          <output for="split-etudes">10 %</output>
+        </div>
+        <div class="slider-row" data-category="transport">
+          <label for="split-transport"><span class="dot transport"></span>Transport</label>
+          <input type="range" id="split-transport" min="0" max="100" step="5" value="5" style="--fill: 5%">
+          <output for="split-transport">5 %</output>
+        </div>
+        <div class="slider-row" data-category="loisirs">
+          <label for="split-loisirs"><span class="dot loisirs"></span>Loisirs</label>
+          <input type="range" id="split-loisirs" min="0" max="100" step="5" value="10" style="--fill: 10%">
+          <output for="split-loisirs">10 %</output>
+        </div>
+        <div class="slider-row" data-category="divers">
+          <label for="split-divers"><span class="dot divers"></span>Divers</label>
+          <input type="range" id="split-divers" min="0" max="100" step="5" value="10" style="--fill: 10%">
+          <output for="split-divers">10 %</output>
+        </div>
+      </div>
+
+      <div class="split-footer">
+        <div class="split-total" id="split-total">
+          <span>Total</span>
+          <strong id="split-total-value">100 %</strong>
+        </div>
+        <button type="button" class="btn-soft" id="split-reset">Rétablir les valeurs par défaut</button>
+      </div>
+    </section>
 
     <!-- CATÉGORIES -->
 
