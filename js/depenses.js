@@ -211,3 +211,68 @@ function renderSummary() {
 }
 
 renderers.push(renderSummary);
+/* =========================================================
+   MODIFIER ET SUPPRIMER
+   Un seul écouteur sur le tableau gère tous les boutons,
+   même ceux des lignes créées plus tard.
+   ========================================================= */
+function startEditing(id) {
+  const expense = expenses.find((e) => e.id === id);
+  if (!expense) return;
+
+  editingId = id;
+  amountInput.value = expense.amount;
+  categoryInput.value = expense.category;
+  dateInput.value = expense.date;
+  descriptionInput.value = expense.description;
+  submitBtn.textContent = 'Enregistrer';
+  form.classList.add('is-editing');
+  clearErrors();
+
+  form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  amountInput.focus({ preventScroll: true });
+}
+
+function stopEditing() {
+  editingId = null;
+  submitBtn.textContent = 'Ajouter';
+  form.classList.remove('is-editing');
+}
+
+list.addEventListener('click', (event) => {
+  const button = event.target.closest('button');
+  if (!button) return;
+
+  const row = button.closest('tr');
+  const id = row.dataset.id;
+
+  if (button.classList.contains('edit')) {
+    startEditing(id);
+  }
+
+  if (button.classList.contains('delete')) {
+    if (!confirm('Supprimer cette dépense ?')) return;
+    if (editingId === id) {
+      stopEditing();
+      form.reset();
+      dateInput.value = today();
+    }
+    // On attend la fin de l'animation avant de retirer la dépense
+    row.classList.add('removing');
+    row.addEventListener('animationend', () => {
+      expenses = expenses.filter((e) => e.id !== id);
+      saveExpenses();
+      render();
+    }, { once: true });
+  }
+});
+
+// Échap annule la modification en cours
+form.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && editingId) {
+    stopEditing();
+    form.reset();
+    dateInput.value = today();
+    clearErrors();
+  }
+});

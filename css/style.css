@@ -679,3 +679,15 @@ input[type="month"] {
 .bump {
   animation: bump 0.5s var(--ease);
 }
+/* =========================================================
+   PAGE DÉPENSES – MODE MODIFICATION
+   ========================================================= */
+.expense-form.is-editing .btn-submit {
+  background: linear-gradient(135deg, var(--etudes), var(--accent), var(--etudes));
+  background-size: 200% 100%;
+}
+
+.expense-form.is-editing .field input,
+.expense-form.is-editing .field select {
+  border-color: var(--etudes);
+}
