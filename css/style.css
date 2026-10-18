@@ -1,0 +1,98 @@
+/* =========================================================
+   VARIABLES
+   Toutes les couleurs du site sont définies ici :
+   les modifier ici les change partout.
+   ========================================================= */
+:root {
+  /* Thème bleu nuit */
+  --bg:          #0a1224;
+  --card:        #111c36;
+  --panel:       #16244a;
+  --border:      #22335f;
+  --text:        #e6ecff;
+  --text-muted:  #94a3c7;
+  --accent:      #4f8cff;
+  --accent-2:    #7c5cff;
+
+  /* Catégories de dépenses : tons chauds et terreux */
+  --logement:     #e76f51;
+  --alimentation: #f4a261;
+  --etudes:       #2a9d8f;
+  --transport:    #8ab17d;
+  --loisirs:      #e9c46a;
+  --divers:       #b5838d;
+
+  /* Conseils : tons froids et pastel, pour se distinguer des catégories */
+  --tip-1: #a0c4ff;
+  --tip-2: #c77dff;
+  --tip-3: #ff8fab;
+  --tip-4: #80ed99;
+  --tip-5: #ffe066;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: radial-gradient(circle at top, #13214a 0%, var(--bg) 60%);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 40px;
+  background: rgba(10, 18, 36, 0.8);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.navbar nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.navbar nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.navbar nav a:hover {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.navbar nav a.active {
+  background: var(--accent);
+  color: #fff;
+}
