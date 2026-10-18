@@ -869,3 +869,141 @@ input[type="month"] {
 
 .trend-up   { color: var(--logement); }  /* les dépenses augmentent */
 .trend-down { color: var(--transport); } /* les dépenses baissent */
+/* =========================================================
+   PAGE STATISTIQUES – GRAPHIQUES
+   ========================================================= */
+.charts {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.chart-card {
+  animation: blurIn 0.9s var(--smooth) both;
+}
+
+.chart-card:nth-child(1) { animation-delay: 0.55s; }
+.chart-card:nth-child(2) { animation-delay: 0.65s; }
+
+/* Chart.js a besoin d'un parent avec une hauteur fixe */
+.chart-box {
+  position: relative;
+  height: 280px;
+}
+
+/* Total affiché au centre du camembert */
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* laisse passer la souris vers le graphique */
+}
+
+.donut-center span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.donut-center strong {
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   PAGE STATISTIQUES – DÉTAIL PAR CATÉGORIE
+   ========================================================= */
+.detail-panel {
+  animation: blurIn 0.9s var(--smooth) 0.75s both;
+}
+
+.detail-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.detail-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.detail-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.detail-name .dot {
+  margin-top: 0;
+}
+
+.detail-amount {
+  color: var(--text-muted);
+}
+
+.detail-amount b {
+  color: var(--text);
+}
+
+.progress {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bg);
+}
+
+/* La barre part de 0 ; le JS ajoute .filled pour la faire grandir */
+.progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 1.2s var(--spring);
+}
+
+.progress-fill.filled {
+  width: var(--value);
+}
+
+/* Petit trait vertical : la part conseillée */
+.progress-marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--text);
+  opacity: 0.6;
+}
+
+.detail-hint {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.detail-hint .over {
+  color: var(--logement);
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.detail-hint .ok {
+  color: var(--transport);
+  margin-left: 6px;
+}
+
+.stats-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 20px 0;
+}

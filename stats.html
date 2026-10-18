@@ -61,10 +61,36 @@
         <span class="kpi-sub" id="kpi-biggest-label"></span>
       </article>
     </section>
+    <!-- ===== GRAPHIQUES ===== -->
+    <section class="charts">
+      <article class="panel chart-card">
+        <h3>Répartition par catégorie</h3>
+        <div class="chart-box">
+          <canvas id="donut-chart" role="img" aria-label="Répartition des dépenses par catégorie"></canvas>
+          <div class="donut-center">
+            <span>Total</span>
+            <strong id="donut-total">0,00 €</strong>
+          </div>
+        </div>
+      </article>
 
-    <!-- GRAPHIQUES -->
+      <article class="panel chart-card">
+        <h3>Évolution sur 6 mois</h3>
+        <div class="chart-box">
+          <canvas id="bar-chart" role="img" aria-label="Évolution des dépenses sur les 6 derniers mois"></canvas>
+        </div>
+      </article>
+    </section>
 
-    <!-- DÉTAIL -->
+    <!-- ===== DÉTAIL PAR CATÉGORIE ===== -->
+    <section class="panel detail-panel">
+      <h3>Détail par catégorie</h3>
+      <!-- Les lignes sont créées par le JavaScript -->
+      <ul class="detail-list" id="detail-list"></ul>
+      <p class="stats-empty" id="stats-empty" hidden>
+        Aucune dépense sur cette période. Ajoutez-en depuis la page Dépenses.
+      </p>
+    </section>
 
   </main>
 
