@@ -1771,3 +1771,178 @@ input[type="month"] {
   color: var(--logement);
   font-weight: 600;
 }
+/* =========================================================
+   PAGE CONNEXION – MISE EN PAGE
+   ========================================================= */
+.auth-page {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 32px;
+  max-width: 1150px;
+  min-height: calc(100vh - 72px);
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* =========================================================
+   PAGE CONNEXION – PANNEAU DÉCORATIF
+   ========================================================= */
+/* Le panneau s'ouvre en cercle depuis le coin haut gauche */
+@keyframes circleReveal {
+  from { -webkit-clip-path: circle(0% at 0% 0%); clip-path: circle(0% at 0% 0%); }
+  to   { -webkit-clip-path: circle(150% at 0% 0%); clip-path: circle(150% at 0% 0%); }
+}
+
+.auth-visual {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 48px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: linear-gradient(160deg, #111c36, #0d1630);
+  animation: circleReveal 1.2s var(--silk) both;
+}
+
+/* Taches de lumière : elles changent de forme ET dérivent en même temps */
+@keyframes morph {
+  0%   { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  50%  { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+  100% { border-radius: 30% 70% 40% 60% / 60% 40% 30% 70%; }
+}
+
+@keyframes drift {
+  from { transform: translate(0, 0) rotate(0deg); }
+  to   { transform: translate(60px, 40px) rotate(45deg); }
+}
+
+.blob {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  opacity: 0.55;
+  filter: blur(60px);
+  animation: morph 14s ease-in-out infinite alternate, drift 18s ease-in-out infinite alternate;
+}
+
+.blob-1 {
+  top: -80px;
+  left: -60px;
+  background: var(--accent);
+}
+
+.blob-2 {
+  right: -60px;
+  bottom: -100px;
+  background: var(--accent-2);
+  animation-duration: 16s, 20s;
+  animation-delay: -4s;
+}
+
+.blob-3 {
+  top: 40%;
+  left: 45%;
+  width: 220px;
+  height: 220px;
+  background: var(--etudes);
+  animation-delay: -8s;
+}
+
+.auth-visual-content {
+  position: relative;
+  z-index: 1; /* le texte reste au-dessus des taches */
+}
+
+@keyframes float {
+  50% { transform: translateY(-10px) rotate(-6deg); }
+}
+
+.auth-logo {
+  display: inline-block;
+  font-size: 2.4rem;
+  animation: float 4s ease-in-out infinite;
+}
+
+.auth-visual h1 {
+  text-align: left;
+  font-size: 2.6rem;
+  margin: 18px 0 10px;
+}
+
+/* Dégradé qui ondule à travers les lettres */
+@keyframes shine {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+
+.shine-text {
+  background: linear-gradient(90deg, var(--text), var(--accent), var(--accent-2), var(--text));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s ease-in-out infinite alternate;
+}
+
+/* Carrousel de mots : une fenêtre d'une ligne, la liste défile dedans */
+@keyframes wordCycle {
+  0%, 22%  { transform: translateY(0); }
+  33%, 55% { transform: translateY(-25%); }
+  66%, 88% { transform: translateY(-50%); }
+  100%     { transform: translateY(-75%); }
+}
+
+.rotating-line {
+  color: var(--text-muted);
+  font-size: 1.15rem;
+}
+
+.rotator {
+  display: inline-block;
+  height: 1.5em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.rotator-track {
+  display: flex;
+  flex-direction: column;
+  animation: wordCycle 7.5s var(--silk) infinite;
+}
+
+.rotator-track span {
+  height: 1.5em;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Avantages qui arrivent un par un */
+@keyframes perkIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.auth-perks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.auth-perks li {
+  color: var(--text-muted);
+  opacity: 0;
+  animation: perkIn 0.7s var(--silk) forwards;
+}
+
+.auth-perks li:nth-child(1) { animation-delay: 0.8s; }
+.auth-perks li:nth-child(2) { animation-delay: 1.0s; }
+.auth-perks li:nth-child(3) { animation-delay: 1.2s; }
+
+.auth-perks span {
+  color: var(--tip-4);
+  font-weight: 800;
+  margin-right: 6px;
+}
