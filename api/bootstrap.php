@@ -9,6 +9,8 @@ require __DIR__ . '/db.php';
 
 // Session PHP : le serveur se souvient de l'utilisateur connecté grâce à un cookie.
 // httponly : le JavaScript ne peut pas lire ce cookie (protection contre le vol de session)
+// Le serveur garde les sessions 30 jours (utile pour "Se souvenir de moi")
+ini_set('session.gc_maxlifetime', (string) (60 * 60 * 24 * 30));
 session_set_cookie_params([
     'lifetime' => 0,
     'path'     => '/',
@@ -85,5 +87,18 @@ function default_settings(): array
             'transport' => '#8ab17d', 'loisirs' => '#e9c46a', 'divers' => '#b5838d',
         ],
         'animations'  => true,
+    ];
+}
+/* ---------- Informations publiques d'un utilisateur ----------
+   On ne renvoie JAMAIS password_hash au navigateur */
+function user_payload(array $row): array
+{
+    return [
+        'id'        => (int) $row['id'],
+        'firstName' => $row['first_name'],
+        'lastName'  => $row['last_name'],
+        'email'     => $row['email'],
+        'phone'     => $row['phone'] ?? '',
+        'address'   => $row['address'] ?? '',
     ];
 }
