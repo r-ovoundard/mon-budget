@@ -2418,3 +2418,162 @@ input[type="month"] {
     align-items: flex-start;
   }
 }
+/* =========================================================
+   PAGE INSCRIPTION – ENTRÉE EN DIAGONALE
+   ========================================================= */
+/* Le panneau se découvre en diagonale depuis le coin haut gauche */
+@keyframes curtainDiag {
+  from { -webkit-clip-path: polygon(0 0, 0 0, 0 0); clip-path: polygon(0 0, 0 0, 0 0); }
+  to   { -webkit-clip-path: polygon(0 0, 200% 0, 0 200%); clip-path: polygon(0 0, 200% 0, 0 200%); }
+}
+
+/* La carte se découvre en diagonale depuis le coin bas droit */
+@keyframes curtainDiagReverse {
+  from { opacity: 0; -webkit-clip-path: polygon(100% 100%, 100% 100%, 100% 100%); clip-path: polygon(100% 100%, 100% 100%, 100% 100%); }
+  to   { opacity: 1; -webkit-clip-path: polygon(100% 100%, -100% 100%, 100% -100%); clip-path: polygon(100% 100%, -100% 100%, 100% -100%); }
+}
+
+/* Remplace l'ouverture en cercle de la page Connexion */
+.signup-page .auth-visual {
+  animation: curtainDiag 1.3s var(--silk) both;
+}
+
+/* "backwards" : le découpage disparaît à la fin, pour ne pas couper l'ombre de la carte */
+.signup-page .auth-card-wrap {
+  animation: curtainDiagReverse 1.3s var(--silk) 0.25s backwards;
+}
+
+/* =========================================================
+   PAGE INSCRIPTION – GRILLE LUMINEUSE EN PERSPECTIVE
+   Un sol quadrillé qui défile vers nous, façon horizon futuriste.
+   ========================================================= */
+@keyframes gridScroll {
+  to { background-position: 0 48px, 0 0; }
+}
+
+.horizon {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: 0;
+  height: 55%;
+  overflow: hidden;
+  perspective: 300px;
+  /* La grille s'efface en montant vers l'horizon */
+  -webkit-mask-image: linear-gradient(to top, #000 30%, transparent);
+  mask-image: linear-gradient(to top, #000 30%, transparent);
+}
+
+.horizon-grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 200%;
+  background-image:
+    linear-gradient(rgba(124, 92, 255, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 140, 255, 0.5) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform-origin: center bottom;
+  transform: rotateX(65deg); /* le plan bascule vers le fond : effet de sol */
+  animation: gridScroll 3s linear infinite;
+}
+
+/* =========================================================
+   PAGE INSCRIPTION – TITRE LETTRE PAR LETTRE
+   ========================================================= */
+@keyframes letterDrop {
+  from { opacity: 0; transform: translateY(-60px) rotate(-12deg) scale(0.6); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+.drop-title span {
+  display: inline-block;
+  background: linear-gradient(180deg, #fff, var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: letterDrop 0.8s var(--spring) both;
+  animation-delay: calc(0.5s + var(--i) * 0.05s); /* chaque lettre un peu après la précédente */
+}
+
+.signup-tagline {
+  max-width: 420px;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  animation: perkIn 0.8s var(--silk) 1.1s both;
+}
+
+/* =========================================================
+   PAGE INSCRIPTION – LES 3 ÉTAPES RELIÉES PAR UNE LIGNE DE LUMIÈRE
+   ========================================================= */
+@keyframes lineGrow {
+  to { transform: scaleY(1); }
+}
+
+@keyframes dotGlow {
+  to {
+    border-color: var(--accent-2);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 0 20px rgba(124, 92, 255, 0.6);
+  }
+}
+
+.steps-line {
+  position: relative;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin-top: 36px;
+}
+
+/* La ligne verticale qui se dessine de haut en bas */
+.steps-line::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 19px;
+  width: 2px;
+  background: linear-gradient(var(--accent), var(--accent-2));
+  transform-origin: top;
+  transform: scaleY(0);
+  animation: lineGrow 1.4s var(--silk) 1.3s forwards;
+}
+
+.steps-line li {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  opacity: 0;
+  animation: perkIn 0.7s var(--silk) forwards;
+  animation-delay: calc(1.3s + var(--i) * 0.45s);
+}
+
+/* Chaque pastille s'allume au moment où son étape arrive */
+.step-dot {
+  position: relative;
+  z-index: 1; /* au-dessus de la ligne */
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  background: var(--card);
+  font-weight: 800;
+  animation: dotGlow 0.6s var(--silk) forwards;
+  animation-delay: inherit;
+}
+
+.steps-line strong {
+  display: block;
+}
+
+.steps-line p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
