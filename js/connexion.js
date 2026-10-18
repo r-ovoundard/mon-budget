@@ -87,3 +87,46 @@ if (canAnimate) {
     authCard.style.transform = '';
   });
 }
+/* =========================================================
+   CONNEXION
+   ========================================================= */
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  loginAlert.textContent = '';
+  loginAlert.classList.remove('info');
+
+  if (!validateLogin()) {
+    wobbleCard();
+    return;
+  }
+
+  loginBtn.classList.add('is-loading');
+
+  try {
+    // On attend au moins 700 ms pour que l'animation de chargement soit visible
+    await Promise.all([
+      loginUser(emailInput.value, passwordInput.value, rememberInput.checked),
+      wait(700),
+    ]);
+
+    loginBtn.classList.replace('is-loading', 'is-success');
+    await wait(900); // le temps de voir la coche se dessiner
+    window.location.href = 'index.html';
+  } catch (error) {
+    loginBtn.classList.remove('is-loading');
+    loginAlert.textContent = error.message;
+    wobbleCard();
+  }
+});
+
+/* =========================================================
+   MOT DE PASSE OUBLIÉ
+   Sans serveur, impossible d'envoyer un email de réinitialisation.
+   ========================================================= */
+document.getElementById('forgot-link').addEventListener('click', (event) => {
+  event.preventDefault();
+  loginAlert.classList.add('info');
+  loginAlert.textContent = 'La réinitialisation arrivera avec la version serveur. En attendant, créez un nouveau compte.';
+});
