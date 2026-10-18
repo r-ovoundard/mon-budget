@@ -158,3 +158,89 @@ animationsToggle.addEventListener('change', () => {
   saveSettings();
   showToast(appSettings.animations ? 'Animations activées' : 'Animations réduites');
 });
+/* =========================================================
+   DONNÉES : EXPORT, IMPORT, EFFACEMENT
+   ========================================================= */
+const EXPENSES_KEY = 'monbudget-depenses'; // même clé que la page Dépenses
+
+function readExpenses() {
+  try {
+    const data = JSON.parse(localStorage.getItem(EXPENSES_KEY));
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+// --- Export : un fichier .json avec les dépenses ET les paramètres
+document.getElementById('export-json').addEventListener('click', () => {
+  const backup = {
+    app: 'MonBudget',
+    exportedAt: new Date().toISOString(),
+    expenses: readExpenses(),
+    settings: appSettings,
+  };
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `monbudget-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  showToast('Sauvegarde téléchargée');
+});
+
+// --- Import : on vérifie le fichier avant de remplacer quoi que ce soit
+const importInput = document.getElementById('import-json');
+
+importInput.addEventListener('change', async () => {
+  const file = importInput.files[0];
+  if (!file) return;
+
+  try {
+    const backup = JSON.parse(await file.text());
+    const valid = Array.isArray(backup.expenses) && backup.expenses.every(
+      (e) => e && typeof e.id === 'string' && typeof e.date === 'string' && Number.isFinite(e.amount),
+    );
+    if (!valid) throw new Error('Format invalide');
+
+    localStorage.setItem(EXPENSES_KEY, JSON.stringify(backup.expenses));
+
+    if (backup.settings) {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(backup.settings));
+      Object.assign(appSettings, loadSettings()); // complète avec les valeurs par défaut
+      applySettings();
+      budgetInput.value = appSettings.budget || '';
+      fillSliders(appSettings.recommended);
+      fillColors();
+      animationsToggle.checked = appSettings.animations;
+    }
+
+    showToast(`${backup.expenses.length} dépense(s) importée(s)`);
+  } catch {
+    showToast('Fichier invalide : choisissez une sauvegarde MonBudget.', 'error');
+  }
+
+  importInput.value = ''; // permet de réimporter le même fichier
+});
+
+// --- Effacement : avec la fenêtre de confirmation
+const confirmDialog = document.getElementById('confirm-dialog');
+
+document.getElementById('clear-data').addEventListener('click', () => {
+  confirmDialog.returnValue = ''; // évite de réutiliser la réponse précédente
+  confirmDialog.showModal();
+});
+
+// Un clic sur le fond flouté ferme la fenêtre
+confirmDialog.addEventListener('click', (event) => {
+  if (event.target === confirmDialog) confirmDialog.close('cancel');
+});
+
+confirmDialog.addEventListener('close', () => {
+  if (confirmDialog.returnValue !== 'confirm') return;
+  localStorage.removeItem(EXPENSES_KEY);
+  showToast('Toutes les dépenses ont été effacées');
+});
