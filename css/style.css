@@ -268,3 +268,32 @@ h1 {
 .tip-3 { --tip-color: var(--tip-3); }
 .tip-4 { --tip-color: var(--tip-4); }
 .tip-5 { --tip-color: var(--tip-5); }
+/* =========================================================
+   RESPONSIVE (écrans de moins de 760px)
+   ========================================================= */
+@media (max-width: 760px) {
+  .navbar {
+    padding: 14px 16px;
+  }
+
+  .container {
+    margin: 32px auto;
+    padding: 0 16px;
+  }
+
+  .card {
+    padding: 28px 20px;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .seg {
+    font-size: 0.65rem;
+  }
+}
