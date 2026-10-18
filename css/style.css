@@ -2577,3 +2577,53 @@ input[type="month"] {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
+/* =========================================================
+   PAGE INSCRIPTION – REFLET DE VERRE
+   --gx et --gy (position de la souris) sont mis à jour par le JS
+   ========================================================= */
+.signup-page .auth-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(400px circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.09), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.5s var(--silk);
+}
+
+.auth-card:hover .card-glare {
+  opacity: 1;
+}
+
+/* =========================================================
+   PAGE INSCRIPTION – CONDITIONS D'UTILISATION
+   ========================================================= */
+.terms {
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.terms strong {
+  color: var(--text);
+}
+/* =========================================================
+   PAGE INSCRIPTION – PRÉNOM ET NOM CÔTE À CÔTE
+   ========================================================= */
+.field-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Un libellé trop long ne déborde pas du champ */
+.float-field label {
+  max-width: calc(100% - 32px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -74,9 +74,93 @@
         </ol>
       </div>
     </section>
+        <!-- ===== FORMULAIRE ===== -->
+    <section class="auth-card-wrap">
+      <div class="auth-card" id="auth-card">
+        <!-- Reflet de lumière qui suit la souris -->
+        <span class="card-glare" aria-hidden="true"></span>
 
-    <!-- FORMULAIRE -->
+        <h2>Créer un compte</h2>
+        <p class="auth-sub">Quelques infos et c'est parti.</p>
 
+        <form id="signup-form" novalidate>
+          <!-- Prénom et Nom côte à côte -->
+          <div class="field-pair">
+            <div class="float-field">
+              <input type="text" id="signup-name" placeholder=" " autocomplete="given-name" maxlength="40">
+              <label for="signup-name">Prénom</label>
+              <span class="field-error" id="name-error"></span>
+            </div>
+            <div class="float-field">
+              <input type="text" id="signup-lastname" placeholder=" " autocomplete="family-name" maxlength="40">
+              <label for="signup-lastname">Nom</label>
+              <span class="field-error" id="lastname-error"></span>
+            </div>
+          </div>
+
+          <div class="float-field">
+            <input type="email" id="signup-email" placeholder=" " autocomplete="email">
+            <label for="signup-email">Adresse email</label>
+            <span class="field-error" id="email-error"></span>
+          </div>
+
+          <div class="float-field">
+            <input type="tel" id="signup-phone" placeholder=" " autocomplete="tel" maxlength="20">
+            <label for="signup-phone">Numéro de téléphone</label>
+            <span class="field-error" id="phone-error"></span>
+          </div>
+
+          <div class="float-field">
+            <input type="text" id="signup-address" placeholder=" " autocomplete="street-address" maxlength="120">
+            <label for="signup-address">Adresse (rue, code postal, ville)</label>
+            <span class="field-error" id="address-error"></span>
+          </div>
+
+          <div class="float-field has-toggle">
+            <input type="password" id="signup-password" placeholder=" " autocomplete="new-password">
+            <label for="signup-password">Mot de passe</label>
+            <button type="button" class="eye-btn" id="toggle-password" aria-label="Afficher le mot de passe">
+              <svg class="eye-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                <circle cx="12" cy="12" r="3"/>
+                <line class="eye-slash" x1="4" y1="20" x2="20" y2="4"/>
+              </svg>
+            </button>
+            <span class="field-error" id="password-error"></span>
+          </div>
+
+          <!-- FORCE -->
+
+          <div class="float-field has-toggle">
+            <input type="password" id="signup-confirm" placeholder=" " autocomplete="new-password">
+            <label for="signup-confirm">Confirmer le mot de passe</label>
+            <span class="match-icon" id="match-icon" aria-hidden="true"></span>
+            <span class="field-error" id="confirm-error"></span>
+          </div>
+
+          <label class="check terms">
+            <input type="checkbox" id="signup-terms">
+            <span class="check-box"></span>
+            <span>J'accepte les <strong>conditions d'utilisation</strong></span>
+          </label>
+          <span class="field-error" id="terms-error"></span>
+
+          <p class="form-alert" id="signup-alert" role="alert"></p>
+
+          <button type="submit" class="btn-morph" id="signup-btn">
+            <span class="btn-label">Créer mon compte</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <svg class="btn-check" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12.5l4.5 4.5L19 7.5"/>
+            </svg>
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Déjà un compte ? <a href="connexion.html" class="auth-link">Se connecter</a>
+        </p>
+      </div>
+    </section>
   </main>
 
   <!-- CONFETTIS -->
