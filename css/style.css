@@ -297,3 +297,37 @@ h1 {
     font-size: 0.65rem;
   }
 }
+/* =========================================================
+   BOUTONS CONNEXION / INSCRIPTION
+   ========================================================= */
+.nav-auth {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-auth a {
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s, filter 0.2s;
+}
+
+.btn-ghost {
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+}
+
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+
+.btn-primary:hover {
+  filter: brightness(1.15);
+}
