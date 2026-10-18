@@ -50,7 +50,39 @@
       </article>
     </section>
 
-    <!-- FORMULAIRE -->
+        <!-- ===== FORMULAIRE ===== -->
+    <section class="panel form-panel">
+      <h3>Ajouter une dépense</h3>
+      <!-- novalidate : on gère nous-mêmes les messages d'erreur en JavaScript -->
+      <form id="expense-form" class="expense-form" novalidate>
+        <div class="field">
+          <label for="amount">Montant (€)</label>
+          <input type="number" id="amount" min="0.01" step="0.01" placeholder="Ex : 12,50">
+        </div>
+        <div class="field">
+          <label for="category">Catégorie</label>
+          <select id="category">
+            <option value="">Choisir…</option>
+            <option value="logement">Logement</option>
+            <option value="alimentation">Alimentation</option>
+            <option value="etudes">Études</option>
+            <option value="transport">Transport</option>
+            <option value="loisirs">Loisirs</option>
+            <option value="divers">Divers</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="date">Date</label>
+          <input type="date" id="date">
+        </div>
+        <div class="field field-wide">
+          <label for="description">Description</label>
+          <input type="text" id="description" maxlength="60" placeholder="Ex : Courses Lidl">
+        </div>
+        <p class="form-error" id="form-error" role="alert"></p>
+        <button type="submit" class="btn-submit" id="submit-btn">Ajouter</button>
+      </form>
+    </section>
 
     <!-- LISTE -->
 

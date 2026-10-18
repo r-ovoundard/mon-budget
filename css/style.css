@@ -425,3 +425,96 @@ h1 {
   font-size: 1.6rem;
   font-weight: 800;
 }
+/* =========================================================
+   PAGE DÉPENSES – FORMULAIRE
+   ========================================================= */
+.form-panel {
+  margin-bottom: 32px;
+  animation: fadeUp 0.7s var(--ease) 0.35s both;
+}
+
+.expense-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-wide {
+  grid-column: 1 / -1; /* occupe toute la largeur du formulaire */
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.field input,
+.field select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font: inherit;
+  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+/* Halo bleu doux autour du champ actif */
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.18);
+}
+
+/* Champ en erreur : bordure rouge + tremblement */
+.field .invalid {
+  border-color: var(--logement);
+  animation: shake 0.4s var(--ease);
+}
+
+/* Calendrier des champs date et mois en mode sombre */
+input[type="date"],
+input[type="month"] {
+  color-scheme: dark;
+}
+
+.form-error {
+  grid-column: 1 / -1;
+  min-height: 1.2em; /* réserve la place pour éviter que la page saute */
+  color: var(--logement);
+  font-size: 0.9rem;
+}
+
+.btn-submit {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  /* Dégradé deux fois plus large que le bouton : on le fait glisser au survol */
+  background: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent));
+  background-size: 200% 100%;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background-position 0.8s var(--ease);
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  background-position: 100% 0;
+  box-shadow: 0 12px 26px rgba(79, 140, 255, 0.35);
+}
+
+.btn-submit:active {
+  transform: translateY(0) scale(0.98);
+}
