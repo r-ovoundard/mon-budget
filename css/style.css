@@ -1007,3 +1007,44 @@ input[type="month"] {
   color: var(--text-muted);
   padding: 20px 0;
 }
+/* =========================================================
+   PAGE STATISTIQUES – BOUTON EXPORT
+   Le dégradé monte du bas pour remplir le bouton au survol.
+   ========================================================= */
+.btn-export {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  padding: 9px 16px;
+  border: 1px solid var(--accent-2);
+  border-radius: 10px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-export::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  transform: translateY(101%);
+  transition: transform 0.5s var(--smooth);
+}
+
+.btn-export:hover::before {
+  transform: translateY(0);
+}
+
+.btn-export:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-export:disabled::before {
+  display: none;
+}

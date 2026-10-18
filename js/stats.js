@@ -350,3 +350,43 @@ function renderDetail(month) {
 }
 
 renderers.push(renderDetail);
+/* =========================================================
+   EXPORT CSV
+   ========================================================= */
+const exportBtn = document.getElementById('export-btn');
+
+// Entoure chaque valeur de guillemets (et double ceux qu'elle contient) : format CSV standard
+function csvCell(value) {
+  return `"${String(value).replace(/"/g, '""')}"`;
+}
+
+exportBtn.addEventListener('click', () => {
+  const month = periodInput.value || currentMonth();
+  const rows = expensesOf(month).sort((a, b) => a.date.localeCompare(b.date));
+  if (rows.length === 0) return;
+
+  const lines = [
+    ['Date', 'Description', 'Catégorie', 'Montant (€)'],
+    ...rows.map((e) => [
+      e.date,
+      e.description,
+      CATEGORIES[e.category],
+      e.amount.toFixed(2).replace('.', ','),
+    ]),
+  ];
+
+  // Point-virgule + caractère BOM au début : Excel en français ouvre le fichier correctement
+  const csv = '\uFEFF' + lines.map((line) => line.map(csvCell).join(';')).join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `depenses-${month}.csv`;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+// Bouton désactivé quand il n'y a rien à exporter
+renderers.push((month) => {
+  exportBtn.disabled = expensesOf(month).length === 0;
+});
