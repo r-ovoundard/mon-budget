@@ -13,15 +13,8 @@ const CATEGORIES = {
   divers: 'Divers',
 };
 
-// Répartition conseillée, la même que sur le tableau de bord (en %)
-const RECOMMENDED = {
-  logement: 45,
-  alimentation: 20,
-  etudes: 10,
-  transport: 5,
-  loisirs: 10,
-  divers: 10,
-};
+// Répartition conseillée, réglée dans la page Paramètres
+const RECOMMENDED = appSettings.recommended;
 
 function loadExpenses() {
   try {
@@ -38,7 +31,7 @@ const expenses = loadExpenses();
    OUTILS
    ========================================================= */
 const euro = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' });
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches || !appSettings.animations;
 
 function today() {
   const now = new Date();

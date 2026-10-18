@@ -1757,3 +1757,17 @@ input[type="month"] {
   transition-duration: 0.01ms !important;
   scroll-behavior: auto !important;
 }
+/* =========================================================
+   PAGE DÉPENSES – BUDGET RESTANT
+   ========================================================= */
+.stat-sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.stat-sub.over-budget {
+  color: var(--logement);
+  font-weight: 600;
+}

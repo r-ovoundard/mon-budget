@@ -294,3 +294,24 @@ filters.push(
 filterMonth.addEventListener('change', renderList);
 filterCategory.addEventListener('change', renderList);
 filterSearch.addEventListener('input', renderList); // filtre à chaque lettre tapée
+/* =========================================================
+   BUDGET RESTANT (réglé dans les Paramètres)
+   ========================================================= */
+const statBudget = document.getElementById('stat-budget');
+
+renderers.push(() => {
+  if (!appSettings.budget) {
+    statBudget.textContent = '';
+    return;
+  }
+
+  const spent = expenses
+    .filter((e) => e.date.startsWith(currentMonth()))
+    .reduce((total, e) => total + e.amount, 0);
+  const left = appSettings.budget - spent;
+
+  statBudget.textContent = left >= 0
+    ? `Reste ${euro.format(left)} sur ${euro.format(appSettings.budget)}`
+    : `Budget dépassé de ${euro.format(-left)}`;
+  statBudget.classList.toggle('over-budget', left < 0);
+});
