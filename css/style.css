@@ -3121,3 +3121,175 @@ input[type="month"] {
   color: var(--text-muted);
   font-size: 0.85rem;
 }
+/* =========================================================
+   PAGE PROFIL – ONGLETS
+   ========================================================= */
+.profile-tabs {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+  animation: heroRise 0.8s var(--silk) 0.9s backwards;
+}
+
+.tab-bar {
+  position: relative; /* repère pour placer l'indicateur */
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  padding: 6px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+}
+
+.tab {
+  position: relative;
+  z-index: 1; /* au-dessus de l'indicateur */
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.4s var(--silk);
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  color: #fff;
+}
+
+/* L'indicateur lumineux qui glisse : sa position et sa largeur viennent du JS */
+.tab-indicator {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  width: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 6px 20px rgba(124, 92, 255, 0.35);
+  transition: transform 0.55s var(--spring), width 0.55s var(--spring),
+              background 0.4s var(--silk), box-shadow 0.4s var(--silk);
+}
+
+/* Sur "Zone de danger", l'indicateur devient rouge */
+.tab-bar.is-danger .tab-indicator {
+  background: var(--danger);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.35);
+}
+
+/* Contenu des onglets : passe du flou au net */
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(12px); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: panelIn 0.5s var(--silk);
+}
+
+/* =========================================================
+   PAGE PROFIL – FORMULAIRES
+   ========================================================= */
+.pgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+
+.pfield {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pfield.wide {
+  grid-column: 1 / -1;
+}
+
+.pfield span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pfield input,
+.modal-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  transition: border-color 0.4s var(--silk), box-shadow 0.4s var(--silk);
+}
+
+.pfield input:focus,
+.modal-input:focus {
+  outline: none;
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.2);
+}
+
+.pfield input.invalid,
+.modal-input.invalid {
+  border-color: var(--danger);
+  animation: shake 0.4s var(--silk);
+}
+
+.pfield-hint {
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.pform-error {
+  min-height: 1.2em;
+  margin: 10px 0 14px;
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   PAGE PROFIL – ZONE DE DANGER
+   ========================================================= */
+.danger-card {
+  padding: 22px;
+  border: 1px dashed var(--danger);
+  border-radius: 16px;
+  background: var(--danger-soft);
+}
+
+.danger-card h3 {
+  color: var(--danger);
+  margin-bottom: 8px;
+}
+
+.danger-card p {
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+.danger-card strong {
+  color: var(--text);
+}
+
+.modal-input {
+  margin-bottom: 4px;
+}

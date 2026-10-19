@@ -62,11 +62,104 @@
       </article>
     </section>
 
-    <!-- ONGLETS -->
+        <!-- ===== ONGLETS ===== -->
+    <section class="profile-tabs">
+      <div class="tab-bar" role="tablist" id="tab-bar">
+        <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="infos">👤 Informations</button>
+        <button type="button" class="tab" role="tab" aria-selected="false" data-tab="security">🔒 Sécurité</button>
+        <button type="button" class="tab tab-danger" role="tab" aria-selected="false" data-tab="danger">⚠️ Zone de danger</button>
+        <span class="tab-indicator" id="tab-indicator" aria-hidden="true"></span>
+      </div>
+
+      <!-- Informations -->
+      <div class="tab-panel active" data-panel="infos" role="tabpanel">
+        <form id="profile-form" novalidate>
+          <div class="pgrid">
+            <label class="pfield">
+              <span>Prénom</span>
+              <input type="text" id="profile-firstname" maxlength="40" autocomplete="given-name">
+            </label>
+            <label class="pfield">
+              <span>Nom</span>
+              <input type="text" id="profile-lastname" maxlength="40" autocomplete="family-name">
+            </label>
+            <label class="pfield wide">
+              <span>Adresse email</span>
+              <input type="email" id="profile-email" autocomplete="email">
+            </label>
+            <label class="pfield">
+              <span>Téléphone</span>
+              <input type="tel" id="profile-phone" maxlength="20" autocomplete="tel">
+            </label>
+            <label class="pfield">
+              <span>Adresse</span>
+              <input type="text" id="profile-address" maxlength="120" autocomplete="street-address">
+            </label>
+          </div>
+          <p class="pform-error" id="profile-error" role="alert"></p>
+          <button type="submit" class="btn-shine">Enregistrer mon profil</button>
+        </form>
+      </div>
+
+      <!-- Sécurité -->
+      <div class="tab-panel" data-panel="security" role="tabpanel">
+        <form id="password-form" novalidate>
+          <div class="pgrid">
+            <label class="pfield wide">
+              <span>Mot de passe actuel</span>
+              <input type="password" id="current-password" autocomplete="current-password">
+            </label>
+            <label class="pfield">
+              <span>Nouveau mot de passe</span>
+              <input type="password" id="new-password" autocomplete="new-password">
+            </label>
+            <label class="pfield">
+              <span>Confirmer le nouveau</span>
+              <input type="password" id="confirm-new-password" autocomplete="new-password">
+            </label>
+          </div>
+          <p class="pfield-hint">8 caractères minimum, avec au moins 2 parmi : une majuscule, un chiffre, un caractère spécial.</p>
+          <p class="pform-error" id="password-form-error" role="alert"></p>
+          <button type="submit" class="btn-shine">Changer le mot de passe</button>
+        </form>
+      </div>
+
+      <!-- Zone de danger -->
+      <div class="tab-panel" data-panel="danger" role="tabpanel">
+        <div class="danger-card">
+          <h3>Supprimer mon compte</h3>
+          <p>
+            Votre compte, toutes vos dépenses et tous vos paramètres seront supprimés
+            <strong>définitivement</strong>. Pensez à exporter une sauvegarde depuis la page Paramètres avant.
+          </p>
+          <button type="button" class="btn-danger" id="delete-account-btn">Supprimer mon compte</button>
+        </div>
+      </div>
+    </section>
 
   </main>
 
-  <!-- FENÊTRES -->
+    <!-- ===== NOTIFICATION ===== -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-icon" id="toast-icon">✓</span>
+    <span id="toast-text"></span>
+    <span class="toast-bar"></span>
+  </div>
+
+  <!-- ===== CONFIRMATION DE SUPPRESSION ===== -->
+  <dialog class="modal" id="delete-dialog">
+    <form method="dialog">
+      <span class="modal-icon">⚠️</span>
+      <h3>Supprimer votre compte ?</h3>
+      <p>Cette action est définitive. Entrez votre mot de passe pour confirmer.</p>
+      <input type="password" id="delete-password" class="modal-input" placeholder="Votre mot de passe" autocomplete="current-password">
+      <p class="pform-error" id="delete-error" role="alert"></p>
+      <div class="modal-actions">
+        <button value="cancel" class="btn-soft">Annuler</button>
+        <button type="button" class="btn-danger" id="confirm-delete">Supprimer définitivement</button>
+      </div>
+    </form>
+  </dialog>
 
   <!-- SCRIPTS -->
 
