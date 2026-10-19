@@ -1,9 +1,8 @@
 /* =========================================================
-   PARAMÈTRES PARTAGÉS
-   Ce fichier est chargé dans le <head> de TOUTES les pages :
-   il lit les réglages et les applique avant l'affichage.
-   Ses noms (appSettings, SETTINGS_KEY…) sont différents de ceux
-   des autres fichiers JS, car tous partagent le même espace global.
+   PARAMÈTRES PARTAGÉS – VERSION SERVEUR
+   Chargé dans le <head> de toutes les pages.
+   1. on applique tout de suite la copie gardée dans le navigateur (cache)
+   2. puis on récupère les paramètres de l'utilisateur sur le serveur
    ========================================================= */
 const SETTINGS_KEY = 'monbudget-parametres';
 
@@ -28,8 +27,7 @@ const DEFAULT_SETTINGS = {
   animations: true,
 };
 
-// On complète toujours avec les valeurs par défaut,
-// au cas où un réglage manque dans ce qui a été enregistré
+// Lit le cache du navigateur, complété par les valeurs par défaut
 function loadSettings() {
   try {
     const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {};
@@ -44,10 +42,6 @@ function loadSettings() {
   }
 }
 
-function saveSettings() {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(appSettings));
-}
-
 // Remplace les couleurs du CSS par celles choisies, et coupe les animations si besoin
 function applySettings() {
   const root = document.documentElement;
@@ -59,3 +53,44 @@ function applySettings() {
 
 const appSettings = loadSettings();
 applySettings();
+
+/* =========================================================
+   SYNCHRONISATION AVEC LE SERVEUR
+   ========================================================= */
+
+// Met à jour appSettings SANS remplacer ses objets internes :
+// les fichiers qui en gardent une référence (ex. RECOMMENDED dans stats.js) restent à jour
+function mergeIntoSettings(source) {
+  if (typeof source.budget === 'number') appSettings.budget = source.budget;
+  if (typeof source.animations === 'boolean') appSettings.animations = source.animations;
+  Object.assign(appSettings.recommended, source.recommended || {});
+  Object.assign(appSettings.colors, source.colors || {});
+}
+
+// Enregistre dans le cache ET sur le serveur
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(appSettings));
+
+  // apiRequest vient de auth.js ; une erreur serveur n'empêche pas l'appli de marcher
+  if (typeof apiRequest === 'function') {
+    apiRequest('settings.php', { method: 'PUT', body: appSettings }).catch(() => {});
+  }
+}
+
+// Promesse "les paramètres du serveur sont arrivés" : les pages peuvent l'attendre
+const settingsReady = new Promise((resolve) => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const user = await getCurrentUser();
+      if (user) {
+        const data = await apiRequest('settings.php');
+        mergeIntoSettings(data.settings);
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(appSettings));
+        applySettings();
+      }
+    } catch {
+      // Serveur injoignable : on garde les réglages du cache
+    }
+    resolve();
+  });
+});

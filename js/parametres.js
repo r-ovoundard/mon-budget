@@ -244,3 +244,17 @@ confirmDialog.addEventListener('close', () => {
   localStorage.removeItem(EXPENSES_KEY);
   showToast('Toutes les dépenses ont été effacées');
 });
+/* =========================================================
+   PAGE RÉSERVÉE + PARAMÈTRES DU SERVEUR
+   ========================================================= */
+getCurrentUser().then((user) => {
+  if (!user) window.location.replace('connexion.html');
+});
+
+// Quand les paramètres du serveur arrivent, on remplit les champs avec
+settingsReady.then(() => {
+  budgetInput.value = appSettings.budget || '';
+  fillSliders(appSettings.recommended);
+  fillColors();
+  animationsToggle.checked = appSettings.animations;
+});

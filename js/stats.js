@@ -184,7 +184,7 @@ async function initStats() {
     statsEmpty.hidden = false;
     statsEmpty.textContent = 'Impossible de charger vos dépenses. Le serveur est-il lancé ?';
   }
-
+  await settingsReady; // attend la répartition de l'utilisateur
   render();
 }
 

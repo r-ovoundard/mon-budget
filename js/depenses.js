@@ -340,7 +340,7 @@ async function init() {
     emptyState.textContent = 'Impossible de charger vos dépenses. Le serveur est-il lancé ?';
     return;
   }
-
+  await settingsReady; // attend le budget de l'utilisateur
   render();
 }
 
