@@ -159,40 +159,35 @@ animationsToggle.addEventListener('change', () => {
   showToast(appSettings.animations ? 'Animations activées' : 'Animations réduites');
 });
 /* =========================================================
-   DONNÉES : EXPORT, IMPORT, EFFACEMENT
+   DONNÉES : EXPORT, IMPORT, EFFACEMENT – VERSION SERVEUR
    ========================================================= */
-const EXPENSES_KEY = 'monbudget-depenses'; // même clé que la page Dépenses
 
-function readExpenses() {
+// --- Export : mes dépenses (depuis le serveur) + mes paramètres
+document.getElementById('export-json').addEventListener('click', async () => {
   try {
-    const data = JSON.parse(localStorage.getItem(EXPENSES_KEY));
-    return Array.isArray(data) ? data : [];
-  } catch {
-    return [];
+    const data = await apiRequest('expenses.php');
+    const backup = {
+      app: 'MonBudget',
+      exportedAt: new Date().toISOString(),
+      expenses: data.expenses,
+      settings: appSettings,
+    };
+
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `monbudget-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    showToast('Sauvegarde téléchargée');
+  } catch (error) {
+    showToast(error.message, 'error');
   }
-}
-
-// --- Export : un fichier .json avec les dépenses ET les paramètres
-document.getElementById('export-json').addEventListener('click', () => {
-  const backup = {
-    app: 'MonBudget',
-    exportedAt: new Date().toISOString(),
-    expenses: readExpenses(),
-    settings: appSettings,
-  };
-
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `monbudget-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-  showToast('Sauvegarde téléchargée');
 });
 
-// --- Import : on vérifie le fichier avant de remplacer quoi que ce soit
+// --- Import : le serveur vérifie le fichier, puis remplace mes dépenses
 const importInput = document.getElementById('import-json');
 
 importInput.addEventListener('change', async () => {
@@ -201,26 +196,33 @@ importInput.addEventListener('change', async () => {
 
   try {
     const backup = JSON.parse(await file.text());
-    const valid = Array.isArray(backup.expenses) && backup.expenses.every(
-      (e) => e && typeof e.id === 'string' && typeof e.date === 'string' && Number.isFinite(e.amount),
-    );
-    if (!valid) throw new Error('Format invalide');
+    if (!Array.isArray(backup.expenses)) {
+      throw new Error('Fichier invalide : choisissez une sauvegarde MonBudget.');
+    }
 
-    localStorage.setItem(EXPENSES_KEY, JSON.stringify(backup.expenses));
+    const result = await apiRequest('data.php', {
+      method: 'POST',
+      body: { expenses: backup.expenses },
+    });
 
-    if (backup.settings) {
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify(backup.settings));
-      Object.assign(appSettings, loadSettings()); // complète avec les valeurs par défaut
+    // Les paramètres de la sauvegarde sont aussi restaurés
+    if (backup.settings && typeof backup.settings === 'object') {
+      mergeIntoSettings(backup.settings);
       applySettings();
+      saveSettings();
       budgetInput.value = appSettings.budget || '';
       fillSliders(appSettings.recommended);
       fillColors();
       animationsToggle.checked = appSettings.animations;
     }
 
-    showToast(`${backup.expenses.length} dépense(s) importée(s)`);
-  } catch {
-    showToast('Fichier invalide : choisissez une sauvegarde MonBudget.', 'error');
+    showToast(`${result.count} dépense(s) importée(s)`);
+  } catch (error) {
+    // SyntaxError : le fichier n'est pas du JSON valide
+    const message = error instanceof SyntaxError
+      ? 'Fichier invalide : choisissez une sauvegarde MonBudget.'
+      : error.message;
+    showToast(message, 'error');
   }
 
   importInput.value = ''; // permet de réimporter le même fichier
@@ -239,10 +241,15 @@ confirmDialog.addEventListener('click', (event) => {
   if (event.target === confirmDialog) confirmDialog.close('cancel');
 });
 
-confirmDialog.addEventListener('close', () => {
+confirmDialog.addEventListener('close', async () => {
   if (confirmDialog.returnValue !== 'confirm') return;
-  localStorage.removeItem(EXPENSES_KEY);
-  showToast('Toutes les dépenses ont été effacées');
+
+  try {
+    const result = await apiRequest('data.php', { method: 'DELETE' });
+    showToast(`${result.deleted} dépense(s) effacée(s)`);
+  } catch (error) {
+    showToast(error.message, 'error');
+  }
 });
 /* =========================================================
    PAGE RÉSERVÉE + PARAMÈTRES DU SERVEUR
