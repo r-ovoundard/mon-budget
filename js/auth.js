@@ -243,7 +243,7 @@ async function renderFooter() {
         <ul>
           <li><a href="conditions.html">Conditions d'utilisation</a></li>
           <li><a href="${GITHUB_URL}" target="_blank" rel="noopener">Code source sur GitHub</a></li>
-          <li><a href="mailto:contact@monbudget.fr">Contact</a></li>
+                    <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
