@@ -1,10 +1,8 @@
 /* =========================================================
-   DONNÉES
-   Les dépenses sont enregistrées dans le localStorage du
-   navigateur : elles restent après fermeture de la page.
+   DONNÉES – VERSION SERVEUR
+   Les dépenses sont lues et enregistrées dans la base de données
+   grâce à l'API PHP (api/expenses.php) et à apiRequest() (auth.js).
    ========================================================= */
-const STORAGE_KEY = 'monbudget-depenses';
-
 const CATEGORIES = {
   logement: 'Logement',
   alimentation: 'Alimentation',
@@ -14,21 +12,8 @@ const CATEGORIES = {
   divers: 'Divers',
 };
 
-function loadExpenses() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return Array.isArray(saved) ? saved : [];
-  } catch {
-    return []; // données illisibles : on repart de zéro plutôt que de planter
-  }
-}
-
-function saveExpenses() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
-}
-
-let expenses = loadExpenses();
-let editingId = null; // dépense en cours de modification (utilisé à l'étape 7)
+let expenses = [];    // rempli au démarrage avec les dépenses du serveur
+let editingId = null; // dépense en cours de modification
 
 /* =========================================================
    OUTILS
@@ -70,7 +55,7 @@ dateInput.value = today();
 
 /* =========================================================
    AFFICHAGE
-   Chaque étape suivante ajoute sa fonction dans "renderers"
+   Chaque partie ajoute sa fonction dans "renderers"
    (et ses filtres dans "filters") : render() les appelle toutes.
    ========================================================= */
 const renderers = [];
@@ -117,12 +102,12 @@ function renderList() {
 renderers.push(renderList);
 
 /* =========================================================
-   FORMULAIRE
+   FORMULAIRE : AJOUTER OU MODIFIER (envoyé au serveur)
    ========================================================= */
 function showError(message, field) {
   errorText.textContent = message;
   field.classList.remove('invalid');
-  void field.offsetWidth; // force le navigateur à rejouer l'animation de tremblement
+  void field.offsetWidth; // rejoue l'animation de tremblement
   field.classList.add('invalid');
   field.focus();
 }
@@ -132,10 +117,11 @@ function clearErrors() {
   form.querySelectorAll('.invalid').forEach((el) => el.classList.remove('invalid'));
 }
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault(); // empêche le rechargement de la page
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
   clearErrors();
 
+  // Première vérification dans le navigateur (le serveur revérifie de son côté)
   const amount = Number(amountInput.value);
   if (!amountInput.value || !Number.isFinite(amount) || amount <= 0) {
     return showError('Entrez un montant supérieur à 0.', amountInput);
@@ -154,26 +140,34 @@ form.addEventListener('submit', (event) => {
     description: descriptionInput.value.trim(),
   };
 
-  if (editingId) {
-    expenses = expenses.map((e) => (e.id === editingId ? { ...e, ...data } : e));
-    stopEditing(); // défini à l'étape 7
-  } else {
-    expenses.push({
-      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      createdAt: Date.now(),
-      ...data,
-    });
-  }
+  submitBtn.disabled = true; // évite un double envoi pendant l'attente
 
-  saveExpenses();
-  form.reset();
-  dateInput.value = today();
-  render();
+  try {
+    if (editingId) {
+      const result = await apiRequest('expenses.php', { method: 'PUT', body: { id: editingId, ...data } });
+      expenses = expenses.map((e) => (e.id === editingId ? result.expense : e));
+      stopEditing();
+    } else {
+      const result = await apiRequest('expenses.php', { method: 'POST', body: data });
+      expenses.push(result.expense);
+    }
+
+    form.reset();
+    dateInput.value = today();
+    render();
+  } catch (error) {
+    // Le serveur indique quel champ pose problème
+    const fields = { amount: amountInput, category: categoryInput, date: dateInput, description: descriptionInput };
+    if (error.field && fields[error.field]) {
+      showError(error.message, fields[error.field]);
+    } else {
+      errorText.textContent = error.message;
+    }
+  } finally {
+    submitBtn.disabled = false;
+  }
 });
 
-// Le premier affichage attend que tout le fichier soit lu,
-// pour inclure les fonctions ajoutées aux étapes suivantes
-document.addEventListener('DOMContentLoaded', render);
 /* =========================================================
    RÉSUMÉ DU MOIS
    ========================================================= */
@@ -211,10 +205,9 @@ function renderSummary() {
 }
 
 renderers.push(renderSummary);
+
 /* =========================================================
    MODIFIER ET SUPPRIMER
-   Un seul écouteur sur le tableau gère tous les boutons,
-   même ceux des lignes créées plus tard.
    ========================================================= */
 function startEditing(id) {
   const expense = expenses.find((e) => e.id === id);
@@ -239,7 +232,7 @@ function stopEditing() {
   form.classList.remove('is-editing');
 }
 
-list.addEventListener('click', (event) => {
+list.addEventListener('click', async (event) => {
   const button = event.target.closest('button');
   if (!button) return;
 
@@ -252,16 +245,24 @@ list.addEventListener('click', (event) => {
 
   if (button.classList.contains('delete')) {
     if (!confirm('Supprimer cette dépense ?')) return;
+
+    // On supprime d'abord sur le serveur, puis on anime la ligne
+    try {
+      await apiRequest(`expenses.php?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    } catch (error) {
+      alert(error.message);
+      return;
+    }
+
     if (editingId === id) {
       stopEditing();
       form.reset();
       dateInput.value = today();
     }
-    // On attend la fin de l'animation avant de retirer la dépense
+
     row.classList.add('removing');
     row.addEventListener('animationend', () => {
       expenses = expenses.filter((e) => e.id !== id);
-      saveExpenses();
       render();
     }, { once: true });
   }
@@ -276,6 +277,7 @@ form.addEventListener('keydown', (event) => {
     clearErrors();
   }
 });
+
 /* =========================================================
    FILTRES ET RECHERCHE
    ========================================================= */
@@ -293,7 +295,8 @@ filters.push(
 
 filterMonth.addEventListener('change', renderList);
 filterCategory.addEventListener('change', renderList);
-filterSearch.addEventListener('input', renderList); // filtre à chaque lettre tapée
+filterSearch.addEventListener('input', renderList);
+
 /* =========================================================
    BUDGET RESTANT (réglé dans les Paramètres)
    ========================================================= */
@@ -315,3 +318,30 @@ renderers.push(() => {
     : `Budget dépassé de ${euro.format(-left)}`;
   statBudget.classList.toggle('over-budget', left < 0);
 });
+
+/* =========================================================
+   DÉMARRAGE
+   1. on vérifie que quelqu'un est connecté
+   2. on charge SES dépenses depuis le serveur
+   3. on affiche
+   ========================================================= */
+async function init() {
+  const user = await getCurrentUser();
+  if (!user) {
+    window.location.replace('connexion.html'); // page réservée aux utilisateurs connectés
+    return;
+  }
+
+  try {
+    const data = await apiRequest('expenses.php');
+    expenses = data.expenses;
+  } catch {
+    emptyState.hidden = false;
+    emptyState.textContent = 'Impossible de charger vos dépenses. Le serveur est-il lancé ?';
+    return;
+  }
+
+  render();
+}
+
+document.addEventListener('DOMContentLoaded', init);
