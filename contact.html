@@ -30,7 +30,23 @@
 
   <main class="container contact-page">
 
-    <!-- EN-TÊTE -->
+       <!-- ===== EN-TÊTE ===== -->
+    <section class="contact-hero">
+      <span class="contact-kicker">💬 Une question, une idée ?</span>
+      <!-- data-text : le vrai titre, révélé par le JS. aria-label : lu tel quel par les lecteurs d'écran -->
+      <h1 class="scramble" data-text="Contactez-nous" aria-label="Contactez-nous">Contactez-nous</h1>
+      <p>Notre équipe vous répond sous 48 heures. Votre avis nous aide à améliorer MonBudget.</p>
+
+      <!-- Deux vagues : le motif est répété 2 fois pour boucler sans à-coup -->
+      <div class="waves" aria-hidden="true">
+        <svg class="wave wave-1" viewBox="0 0 2880 120" preserveAspectRatio="none">
+          <path d="M0,60 C240,110 480,10 720,60 C960,110 1200,10 1440,60 C1680,110 1920,10 2160,60 C2400,110 2640,10 2880,60 L2880,120 L0,120 Z"/>
+        </svg>
+        <svg class="wave wave-2" viewBox="0 0 2880 120" preserveAspectRatio="none">
+          <path d="M0,60 C240,110 480,10 720,60 C960,110 1200,10 1440,60 C1680,110 1920,10 2160,60 C2400,110 2640,10 2880,60 L2880,120 L0,120 Z"/>
+        </svg>
+      </div>
+    </section>
 
     <!-- CONTENU -->
 

@@ -4164,3 +4164,79 @@ body {
     text-align: center;
   }
 }
+/* =========================================================
+   PAGE CONTACT – EN-TÊTE AVEC VAGUES
+   ========================================================= */
+@keyframes waveMove {
+  to { transform: translateX(-50%); } /* la moitié = un motif complet */
+}
+
+.container.contact-page {
+  max-width: 1100px;
+}
+
+.contact-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 40px 32px 100px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: linear-gradient(160deg, #13214a, var(--card));
+  text-align: center;
+}
+
+.contact-kicker {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid rgba(79, 140, 255, 0.4);
+  border-radius: 999px;
+  background: rgba(79, 140, 255, 0.12);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.contact-hero h1 {
+  margin: 16px 0 10px;
+  font-size: 2.6rem;
+  letter-spacing: 0.02em;
+}
+
+.contact-hero p {
+  max-width: 520px;
+  margin: 0 auto;
+  color: var(--text-muted);
+}
+
+.waves {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 80px;
+}
+
+/* Chaque vague fait 2 fois la largeur et glisse d'un motif : boucle parfaite */
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+}
+
+.wave-1 path {
+  fill: rgba(79, 140, 255, 0.22);
+}
+
+.wave-1 {
+  animation: waveMove 14s linear infinite;
+}
+
+.wave-2 path {
+  fill: rgba(124, 92, 255, 0.28);
+}
+
+.wave-2 {
+  height: 75%;
+  animation: waveMove 9s linear infinite reverse; /* sens inverse : effet de houle */
+}
