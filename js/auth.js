@@ -148,3 +148,46 @@ async function renderAuthNav() {
 
 // auth.js est dans le <head> : on attend que le menu existe
 document.addEventListener('DOMContentLoaded', renderAuthNav);
+/* =========================================================
+   BOUTON "← RETOUR"
+   Ajouté automatiquement en haut des pages intérieures.
+   ========================================================= */
+const PAGES_WITHOUT_BACK = ['index.html', 'connexion.html', 'inscription.html'];
+
+function goBack() {
+  // D'où vient-on ? (document.referrer = l'adresse de la page précédente)
+  let previousPage = null;
+  try {
+    const referrer = new URL(document.referrer);
+    if (referrer.origin === window.location.origin) {
+      previousPage = referrer.pathname.split('/').pop() || 'index.html';
+    }
+  } catch {
+    // pas de page précédente (lien direct, favori, nouvel onglet)
+  }
+
+  // Page précédente du site (hors Connexion/Inscription) : on y retourne.
+  // Sinon : tableau de bord, pour ne jamais sortir de l'application.
+  if (previousPage && !PAGES_WITHOUT_BACK.slice(1).includes(previousPage)) {
+    window.history.back();
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
+function renderBackButton() {
+  const page = window.location.pathname.split('/').pop() || 'index.html';
+  const main = document.querySelector('main');
+  if (PAGES_WITHOUT_BACK.includes(page) || !main) return;
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'back-btn';
+  button.setAttribute('aria-label', 'Revenir à la page précédente');
+  button.innerHTML = '<span class="back-arrow" aria-hidden="true">←</span><span>Retour</span>';
+  button.addEventListener('click', goBack);
+
+  main.prepend(button); // tout en haut du contenu de la page
+}
+
+document.addEventListener('DOMContentLoaded', renderBackButton);

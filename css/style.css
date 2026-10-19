@@ -3379,3 +3379,55 @@ input[type="month"] {
   opacity: 1;
   animation: lockSwing 0.6s var(--spring);
 }
+/* =========================================================
+   BOUTON "← RETOUR"
+   ========================================================= */
+@keyframes backIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 8px 16px 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  /* "backwards" : après l'arrivée, l'effet de clic peut encore agir */
+  animation: backIn 0.6s var(--silk) backwards;
+  transition: color 0.3s, border-color 0.3s, background 0.3s, transform 0.4s var(--spring);
+}
+
+.back-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgba(79, 140, 255, 0.1);
+}
+
+.back-btn:active {
+  transform: scale(0.96);
+}
+
+.back-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* La flèche recule au survol, comme pour montrer le chemin */
+.back-arrow {
+  display: inline-block;
+  font-size: 1.05rem;
+  transition: transform 0.4s var(--spring);
+}
+
+.back-btn:hover .back-arrow {
+  transform: translateX(-4px);
+}
