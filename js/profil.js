@@ -227,3 +227,57 @@ passwordForm.addEventListener('submit', async (event) => {
     markField(passwordInputs, error.field);
   }
 });
+/* =========================================================
+   ZONE DE DANGER : SUPPRIMER MON COMPTE
+   ========================================================= */
+const deleteDialog = document.getElementById('delete-dialog');
+const deletePassword = document.getElementById('delete-password');
+const deleteError = document.getElementById('delete-error');
+const confirmDeleteBtn = document.getElementById('confirm-delete');
+
+document.getElementById('delete-account-btn').addEventListener('click', () => {
+  deletePassword.value = '';
+  deletePassword.classList.remove('invalid');
+  deleteError.textContent = '';
+  deleteDialog.showModal();
+  deletePassword.focus();
+});
+
+// Clic sur le fond flouté : on ferme
+deleteDialog.addEventListener('click', (event) => {
+  if (event.target === deleteDialog) deleteDialog.close('cancel');
+});
+
+async function deleteAccount() {
+  deleteError.textContent = '';
+  deletePassword.classList.remove('invalid');
+  confirmDeleteBtn.disabled = true;
+
+  try {
+    await apiRequest('account.php', { method: 'DELETE', body: { password: deletePassword.value } });
+
+    // On nettoie aussi la copie des paramètres gardée dans le navigateur
+    localStorage.removeItem(SETTINGS_KEY);
+
+    deleteDialog.close('deleted');
+    showToast('Compte supprimé. À bientôt !');
+    setTimeout(() => window.location.replace('inscription.html'), 1500);
+  } catch (error) {
+    deleteError.textContent = error.message;
+    void deletePassword.offsetWidth;
+    deletePassword.classList.add('invalid');
+    deletePassword.focus();
+  } finally {
+    confirmDeleteBtn.disabled = false;
+  }
+}
+
+confirmDeleteBtn.addEventListener('click', deleteAccount);
+
+// Entrée dans le champ mot de passe = confirmer
+deletePassword.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    deleteAccount();
+  }
+});
