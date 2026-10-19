@@ -2933,3 +2933,191 @@ input[type="month"] {
 .nav-user:hover {
   background: var(--panel);
 }
+/* =========================================================
+   PAGE PROFIL – ANIMATIONS
+   ========================================================= */
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes heroSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Une petite lune fait le tour de l'avatar (le 2e rotate la garde droite) */
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+
+/* Dévoilement de gauche à droite, comme un rideau */
+@keyframes wipeIn {
+  from { -webkit-clip-path: inset(0 100% 0 0); clip-path: inset(0 100% 0 0); }
+  to   { -webkit-clip-path: inset(0 0 0 0); clip-path: inset(0 0 0 0); }
+}
+
+/* La carte bascule vers nous */
+@keyframes flipIn {
+  from { opacity: 0; transform: rotateX(-90deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* =========================================================
+   PAGE PROFIL – EN-TÊTE
+   ========================================================= */
+.container.profile-page {
+  max-width: 900px;
+}
+
+.profile-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 24px;
+  padding: 36px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--card);
+  animation: heroRise 0.9s var(--silk) backwards;
+}
+
+/* Halo de lumière qui tourne lentement derrière le contenu */
+.hero-glow {
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(from 0deg,
+    transparent 0deg, rgba(79, 140, 255, 0.25) 60deg, transparent 120deg,
+    rgba(124, 92, 255, 0.25) 200deg, transparent 260deg);
+  filter: blur(40px);
+  animation: heroSpin 14s linear infinite;
+}
+
+.hero-avatar-wrap {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+}
+
+.hero-avatar {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+  box-shadow: 0 0 0 4px var(--card), 0 0 0 6px rgba(124, 92, 255, 0.5);
+  animation: avatarPop 0.8s var(--spring) 0.3s both;
+}
+
+/* Deux petites lunes lumineuses en orbite */
+.hero-avatar-wrap::before,
+.hero-avatar-wrap::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  animation: orbit 4s linear infinite;
+}
+
+.hero-avatar-wrap::before {
+  width: 10px;
+  height: 10px;
+  margin: -5px;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.hero-avatar-wrap::after {
+  width: 7px;
+  height: 7px;
+  margin: -3.5px;
+  background: var(--accent-2);
+  box-shadow: 0 0 12px var(--accent-2);
+  animation-duration: 6s;
+  animation-direction: reverse;
+}
+
+.hero-info {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.hero-info h1 {
+  text-align: left;
+  font-size: 2rem;
+  animation: wipeIn 1s var(--silk) 0.4s both;
+}
+
+.hero-info p {
+  margin: 4px 0 12px;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+  animation: wipeIn 1s var(--silk) 0.55s both;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid rgba(124, 92, 255, 0.4);
+  border-radius: 999px;
+  background: rgba(124, 92, 255, 0.15);
+  font-size: 0.8rem;
+  font-weight: 600;
+  animation: perkIn 0.7s var(--silk) 0.8s both;
+}
+
+/* =========================================================
+   PAGE PROFIL – STATISTIQUES
+   ========================================================= */
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+  perspective: 800px; /* profondeur pour le basculement */
+}
+
+/* "backwards" : après l'animation, le survol peut à nouveau déplacer la carte */
+.pstat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  transform-origin: top;
+  animation: flipIn 0.8s var(--spring) backwards;
+  animation-delay: calc(0.6s + var(--i) * 0.12s);
+  transition: transform 0.4s var(--spring), border-color 0.4s var(--silk);
+}
+
+.pstat:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-2);
+}
+
+.pstat-icon {
+  font-size: 1.4rem;
+}
+
+.pstat strong {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.pstat-label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}

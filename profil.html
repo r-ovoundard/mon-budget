@@ -30,9 +30,37 @@
 
   <main class="container profile-page">
 
-    <!-- EN-TÊTE -->
+        <!-- ===== EN-TÊTE ===== -->
+    <section class="profile-hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-avatar-wrap">
+        <span class="hero-avatar" id="hero-avatar">?</span>
+      </div>
+      <div class="hero-info">
+        <h1 id="hero-name">Chargement…</h1>
+        <p id="hero-email"></p>
+        <span class="hero-badge" id="hero-since">Membre MonBudget</span>
+      </div>
+    </section>
 
-    <!-- STATISTIQUES -->
+    <!-- ===== STATISTIQUES ===== -->
+    <section class="profile-stats">
+      <article class="pstat" style="--i: 0">
+        <span class="pstat-icon">🧾</span>
+        <strong id="pstat-count">0</strong>
+        <span class="pstat-label">Dépenses enregistrées</span>
+      </article>
+      <article class="pstat" style="--i: 1">
+        <span class="pstat-icon">💶</span>
+        <strong id="pstat-total">0,00 €</strong>
+        <span class="pstat-label">Total dépensé</span>
+      </article>
+      <article class="pstat" style="--i: 2">
+        <span class="pstat-icon">🏆</span>
+        <strong id="pstat-top">—</strong>
+        <span class="pstat-label">Catégorie principale</span>
+      </article>
+    </section>
 
     <!-- ONGLETS -->
 
