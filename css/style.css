@@ -2858,3 +2858,65 @@ input[type="month"] {
     animation: none !important;
   }
 }
+/* =========================================================
+   COULEUR D'ALERTE FIXE
+   Indépendante des catégories : les alertes restent rouges
+   même si l'utilisateur change la couleur du Logement.
+   ========================================================= */
+:root {
+  --danger: #ff6b6b;
+  --danger-soft: rgba(255, 107, 107, 0.12);
+}
+
+/* Messages d'erreur et budget dépassé */
+.stat-sub.over-budget,
+.form-error,
+.field-error,
+.detail-hint .over,
+.trend-up {
+  color: var(--danger);
+}
+
+/* Champs en erreur */
+.field .invalid,
+.float-field.invalid input {
+  border-color: var(--danger);
+}
+
+/* Total de la répartition différent de 100 % */
+.split-total.invalid {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+}
+
+.split-total.invalid strong {
+  color: var(--danger);
+}
+
+/* Bouton "Tout effacer" et zone de danger */
+.btn-danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(255, 107, 107, 0.35);
+}
+
+.danger-zone:hover {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px var(--danger-soft);
+}
+
+/* ✕ rouge de la confirmation du mot de passe et notification d'erreur */
+.match-icon.ko,
+.toast.error .toast-icon {
+  background: var(--danger);
+}
+
+/* Mot de passe "Faible" */
+.strength[data-level="1"] {
+  --level-color: var(--danger);
+}
