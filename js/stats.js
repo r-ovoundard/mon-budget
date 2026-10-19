@@ -2,7 +2,7 @@
    DONNÉES
    On lit les dépenses enregistrées par la page Dépenses.
    ========================================================= */
-const STORAGE_KEY = 'monbudget-depenses';
+
 
 const CATEGORIES = {
   logement: 'Logement',
@@ -16,16 +16,8 @@ const CATEGORIES = {
 // Répartition conseillée, réglée dans la page Paramètres
 const RECOMMENDED = appSettings.recommended;
 
-function loadExpenses() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return Array.isArray(saved) ? saved : [];
-  } catch {
-    return [];
-  }
-}
-
-const expenses = loadExpenses();
+// Rempli au démarrage avec les dépenses de l'utilisateur, depuis le serveur
+let expenses = [];
 
 /* =========================================================
    OUTILS
@@ -172,9 +164,31 @@ document.querySelectorAll('.kpi').forEach((card) => {
     card.style.setProperty('--y', `${event.clientY - rect.top}px`);
   });
 });
+/* =========================================================
+   DÉMARRAGE
+   1. on vérifie que quelqu'un est connecté
+   2. on charge SES dépenses depuis le serveur
+   3. on affiche les statistiques
+   ========================================================= */
+async function initStats() {
+  const user = await getCurrentUser();
+  if (!user) {
+    window.location.replace('connexion.html'); // page réservée aux utilisateurs connectés
+    return;
+  }
 
-// Premier affichage une fois tout le fichier lu (y compris les étapes suivantes)
-document.addEventListener('DOMContentLoaded', render);
+  try {
+    const data = await apiRequest('expenses.php');
+    expenses = data.expenses;
+  } catch {
+    statsEmpty.hidden = false;
+    statsEmpty.textContent = 'Impossible de charger vos dépenses. Le serveur est-il lancé ?';
+  }
+
+  render();
+}
+
+document.addEventListener('DOMContentLoaded', initStats);
 /* =========================================================
    GRAPHIQUE EN CAMEMBERT
    ========================================================= */
