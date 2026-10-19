@@ -168,7 +168,7 @@ function goBack() {
 
   // Page précédente du site (hors Connexion/Inscription) : on y retourne.
   // Sinon : tableau de bord, pour ne jamais sortir de l'application.
-  
+
     // On revient en arrière, sauf vers Connexion (elle renverrait ici : boucle),
   // et seulement si l'onglet a bien une page précédente
   if (previousPage && previousPage !== 'connexion.html' && window.history.length > 1) {
@@ -194,3 +194,93 @@ function renderBackButton() {
 }
 
 document.addEventListener('DOMContentLoaded', renderBackButton);
+/* =========================================================
+   PIED DE PAGE
+   Ajouté automatiquement en bas de toutes les pages.
+   ========================================================= */
+// ⚠ Remplace TON-PSEUDO par ton nom d'utilisateur GitHub
+   const GITHUB_URL = 'https://github.com/r-ovoundard/mon-budget';
+
+async function renderFooter() {
+  if (document.querySelector('.site-footer')) return; // déjà présent
+
+  const user = await getCurrentUser();
+  const year = new Date().getFullYear();
+
+  // La colonne "Compte" change selon qu'on est connecté ou non
+  const accountLinks = user
+    ? `<li><a href="profil.html">Mon profil</a></li>
+       <li><a href="#" data-action="logout">Déconnexion</a></li>`
+    : `<li><a href="connexion.html">Connexion</a></li>
+       <li><a href="inscription.html">Inscription</a></li>`;
+
+  const footer = document.createElement('footer');
+  footer.className = 'site-footer';
+  footer.innerHTML = `
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">💸 Mon<span>Budget</span></a>
+        <p>L'application qui aide les étudiants à suivre leurs dépenses et à garder le contrôle de leur budget.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Application</h4>
+        <ul>
+          <li><a href="index.html">Tableau de bord</a></li>
+          <li><a href="depenses.html">Dépenses</a></li>
+          <li><a href="stats.html">Statistiques</a></li>
+          <li><a href="parametres.html">Paramètres</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Compte</h4>
+        <ul>${accountLinks}</ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="conditions.html">Conditions d'utilisation</a></li>
+          <li><a href="${GITHUB_URL}" target="_blank" rel="noopener">Code source sur GitHub</a></li>
+          <li><a href="mailto:contact@monbudget.fr">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© ${year} MonBudget · Projet étudiant</span>
+      <button type="button" class="to-top">
+        Haut de page <span class="to-top-arrow" aria-hidden="true">↑</span>
+      </button>
+    </div>
+  `;
+
+  document.body.append(footer);
+
+  // "Haut de page" : remontée en douceur (instantanée si les animations sont coupées)
+  footer.querySelector('.to-top').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: appSettings.animations ? 'smooth' : 'auto' });
+  });
+
+  // "Déconnexion" dans le pied de page
+  const logoutLink = footer.querySelector('[data-action="logout"]');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', async (event) => {
+      event.preventDefault();
+      await logoutUser();
+      window.location.href = 'connexion.html';
+    });
+  }
+
+  // Le pied de page apparaît quand il arrive à l'écran
+  const observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      footer.classList.add('visible');
+      observer.disconnect();
+    }
+  }, { threshold: 0.15 });
+  observer.observe(footer);
+}
+
+document.addEventListener('DOMContentLoaded', renderFooter);
