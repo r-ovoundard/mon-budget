@@ -122,3 +122,126 @@ getCurrentUser().then((user) => {
   contactNameInput.value = `${user.firstName} ${user.lastName}`;
   contactEmailInput.value = user.email;
 });
+/* =========================================================
+   ENVOI DU MESSAGE AVEC FORMSPREE
+   Formspree reçoit le message et te le transfère par email.
+   ========================================================= */
+// ⚠ Remplace par l'adresse de TON formulaire Formspree
+const FORMSPREE_URL = 'https://formspree.io/f/xnpjybba';
+
+const SUBJECT_LABELS = {
+  question: 'Question',
+  bug: 'Signalement de bug',
+  idee: 'Idée / suggestion',
+  autre: 'Autre',
+};
+
+const contactForm = document.getElementById('contact-form');
+const contactError = document.getElementById('contact-error');
+const contactSuccess = document.getElementById('contact-success');
+const successName = document.getElementById('success-name');
+const websiteInput = document.getElementById('contact-website');
+const paperPlane = document.getElementById('paper-plane');
+const CONTACT_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Affiche un message d'erreur, et met le champ concerné en rouge
+function setContactError(input, message) {
+  contactError.textContent = message;
+  document.querySelectorAll('.cfield.invalid').forEach((field) => field.classList.remove('invalid'));
+  if (input) {
+    const field = input.closest('.cfield');
+    void field.offsetWidth; // rejoue le tremblement
+    field.classList.add('invalid');
+    input.focus();
+  }
+}
+
+// Le rouge disparaît dès qu'on corrige le champ
+[contactNameInput, contactEmailInput, contactMessageInput].forEach((input) => {
+  input.addEventListener('input', () => input.closest('.cfield').classList.remove('invalid'));
+});
+
+/* ---------- L'avion en papier ---------- */
+function launchPlane() {
+  // Navigateur trop ancien ou animations coupées : pas d'avion
+  if (!contactCanAnimate || !CSS.supports('offset-path', 'path("M 0 0 L 1 1")')) return;
+
+  const rect = contactBtn.getBoundingClientRect();
+  const startX = rect.left + rect.width / 2;
+  const startY = rect.top + rect.height / 2;
+  const endX = window.innerWidth + 80; // sort de l'écran à droite…
+  const endY = -80;                     // …et en haut
+
+  // Courbe de Bézier : l'avion monte, redescend un peu, puis s'envole
+  paperPlane.style.offsetPath = `path("M ${startX} ${startY} C ${startX + 140} ${startY - 180}, ${window.innerWidth * 0.55} ${startY + 60}, ${endX} ${endY}")`;
+
+  paperPlane.classList.remove('flying');
+  void paperPlane.offsetWidth;
+  paperPlane.classList.add('flying');
+}
+
+paperPlane.addEventListener('animationend', () => paperPlane.classList.remove('flying'));
+
+/* ---------- Envoi ---------- */
+contactForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  setContactError(null, '');
+
+  const name = contactNameInput.value.trim();
+  const email = contactEmailInput.value.trim();
+  const message = contactMessageInput.value.trim();
+  const subject = contactForm.querySelector('input[name="subject"]:checked')?.value || 'autre';
+
+  // Vérifications avant l'envoi
+  if (name.length < 2) return setContactError(contactNameInput, 'Entrez votre nom.');
+  if (!CONTACT_EMAIL_PATTERN.test(email)) return setContactError(contactEmailInput, 'Entrez une adresse email valide.');
+  if (message.length < 10) return setContactError(contactMessageInput, 'Votre message est trop court (10 caractères minimum).');
+
+  contactBtn.disabled = true;
+
+  try {
+    const response = await fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        name,
+        email,                                             // Formspree s'en sert pour "Répondre"
+        sujet: SUBJECT_LABELS[subject],
+        message,
+        _subject: `MonBudget – ${SUBJECT_LABELS[subject]}`, // objet de l'email que tu reçois
+        _gotcha: websiteInput.value,                       // champ piège : rempli = robot, message ignoré
+      }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.errors?.[0]?.message || "L'envoi a échoué. Réessayez dans un instant.");
+    }
+
+    launchPlane();
+    successName.textContent = name.split(' ')[0];
+
+    // On laisse l'avion décoller avant d'afficher la carte de remerciement
+    setTimeout(() => {
+      contactForm.hidden = true;
+      contactSuccess.hidden = false;
+    }, contactCanAnimate ? 700 : 0);
+  } catch (error) {
+    // TypeError : pas de connexion Internet
+    setContactError(null, error instanceof TypeError
+      ? 'Impossible de joindre le service. Vérifiez votre connexion Internet.'
+      : error.message);
+  } finally {
+    contactBtn.disabled = false;
+    contactBtn.style.transform = '';
+  }
+});
+
+/* ---------- "Envoyer un autre message" ---------- */
+document.getElementById('contact-again').addEventListener('click', () => {
+  contactMessageInput.value = '';
+  updateCounter();
+  contactSuccess.hidden = true;
+  contactForm.hidden = false;
+  contactMessageInput.focus();
+});
