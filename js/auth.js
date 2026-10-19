@@ -89,7 +89,9 @@ async function renderAuthNav() {
   const firstName = user.firstName;
 
   // textContent (et non innerHTML) : un nom contenant du HTML ne sera jamais interprété
-  const greeting = document.createElement('span');
+    // Le "Bonjour, Prénom" devient un lien vers la page Profil
+  const greeting = document.createElement('a');
+  greeting.href = 'profil.html';
   greeting.className = 'nav-user';
   const avatar = document.createElement('span');
   avatar.className = 'nav-avatar';

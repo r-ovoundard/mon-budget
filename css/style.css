@@ -2920,3 +2920,16 @@ input[type="month"] {
 .strength[data-level="1"] {
   --level-color: var(--danger);
 }
+/* =========================================================
+   MENU – "BONJOUR, PRÉNOM" CLIQUABLE
+   ========================================================= */
+.nav-user {
+  padding: 4px 12px 4px 4px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.3s var(--silk);
+}
+
+.nav-user:hover {
+  background: var(--panel);
+}
