@@ -136,3 +136,94 @@ async function initProfile() {
 }
 
 document.addEventListener('DOMContentLoaded', initProfile);
+/* =========================================================
+   ONGLET INFORMATIONS
+   ========================================================= */
+const profileForm = document.getElementById('profile-form');
+const profileInputs = {
+  firstName: document.getElementById('profile-firstname'),
+  lastName: document.getElementById('profile-lastname'),
+  email: document.getElementById('profile-email'),
+  phone: document.getElementById('profile-phone'),
+  address: document.getElementById('profile-address'),
+};
+const profileError = document.getElementById('profile-error');
+
+function fillForm(user) {
+  for (const [key, input] of Object.entries(profileInputs)) {
+    input.value = user[key] || '';
+  }
+}
+
+// Met en rouge le champ indiqué par le serveur (et retire les anciens)
+function markField(inputs, field) {
+  Object.values(inputs).forEach((input) => input.classList.remove('invalid'));
+  if (field && inputs[field]) {
+    void inputs[field].offsetWidth; // rejoue le tremblement
+    inputs[field].classList.add('invalid');
+    inputs[field].focus();
+  }
+}
+
+profileForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  profileError.textContent = '';
+  markField(profileInputs, null);
+
+  const body = {};
+  for (const [key, input] of Object.entries(profileInputs)) {
+    body[key] = input.value.trim();
+  }
+
+  try {
+    const result = await apiRequest('profile.php', { method: 'PUT', body });
+    fillHero(result.user);
+    fillForm(result.user);
+
+    // Met à jour "Bonjour, Prénom" dans le menu sans recharger
+    currentUserPromise = Promise.resolve(result.user);
+    renderAuthNav();
+
+    showToast('Profil enregistré');
+  } catch (error) {
+    profileError.textContent = error.message;
+    markField(profileInputs, error.field);
+  }
+});
+
+/* =========================================================
+   ONGLET SÉCURITÉ
+   ========================================================= */
+const passwordForm = document.getElementById('password-form');
+const passwordInputs = {
+  currentPassword: document.getElementById('current-password'),
+  newPassword: document.getElementById('new-password'),
+  confirmPassword: document.getElementById('confirm-new-password'),
+};
+const passwordFormError = document.getElementById('password-form-error');
+
+passwordForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  passwordFormError.textContent = '';
+  markField(passwordInputs, null);
+
+  const { currentPassword, newPassword, confirmPassword } = passwordInputs;
+
+  if (newPassword.value !== confirmPassword.value) {
+    passwordFormError.textContent = 'Les deux nouveaux mots de passe ne sont pas identiques.';
+    markField(passwordInputs, 'confirmPassword');
+    return;
+  }
+
+  try {
+    await apiRequest('password.php', {
+      method: 'PUT',
+      body: { currentPassword: currentPassword.value, newPassword: newPassword.value },
+    });
+    passwordForm.reset();
+    showToast('Mot de passe modifié');
+  } catch (error) {
+    passwordFormError.textContent = error.message;
+    markField(passwordInputs, error.field);
+  }
+});
