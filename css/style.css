@@ -3616,3 +3616,551 @@ html:has(.legal-page) {
     padding: 22px 18px;
   }
 }
+/* =========================================================
+   TABLEAU DE BORD – ACCUEIL PERSONNALISÉ
+   ========================================================= */
+@keyframes homePop {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes kickerShine {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+.home-panel {
+  margin-bottom: 28px;
+}
+
+/* Les boutons du site, utilisés ici sur des liens */
+a.btn-shine,
+a.btn-soft {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Fond commun : deux halos colorés dans les coins */
+.home-guest,
+.home-user {
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(79, 140, 255, 0.18), transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(124, 92, 255, 0.18), transparent 50%),
+    var(--card);
+  animation: homePop 0.8s var(--silk) backwards;
+}
+
+/* =========================================================
+   DÉCONNECTÉ – INVITATION
+   ========================================================= */
+.home-guest {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+/* Petit badge avec un reflet qui le traverse */
+.home-kicker {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid rgba(124, 92, 255, 0.4);
+  border-radius: 999px;
+  background:
+    linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%),
+    rgba(124, 92, 255, 0.15);
+  background-size: 200% 100%, auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  animation: kickerShine 3s linear infinite;
+}
+
+.home-guest h2 {
+  margin: 14px 0 10px;
+  font-size: 1.9rem;
+  line-height: 1.2;
+}
+
+.home-guest-text > p {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.home-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.home-features li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  animation: homePop 0.7s var(--silk) backwards;
+}
+
+.home-features li:nth-child(1) { animation-delay: 0.20s; }
+.home-features li:nth-child(2) { animation-delay: 0.35s; }
+.home-features li:nth-child(3) { animation-delay: 0.50s; }
+
+.home-feature-icon {
+  font-size: 1.5rem;
+}
+
+.home-features p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* =========================================================
+   CONNECTÉ – RÉSUMÉ DU MOIS
+   ========================================================= */
+.home-hello {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.home-hello h2 {
+  font-size: 1.6rem;
+}
+
+.home-hello p {
+  color: var(--text-muted);
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: auto 1fr 1.2fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.home-ring-card,
+.home-figure,
+.home-recent {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  animation: homePop 0.7s var(--silk) backwards;
+}
+
+.home-ring-card { animation-delay: 0.15s; }
+.home-figure:nth-child(1) { animation-delay: 0.25s; }
+.home-figure:nth-child(2) { animation-delay: 0.35s; }
+.home-figure:nth-child(3) { animation-delay: 0.45s; }
+.home-recent { animation-delay: 0.55s; }
+
+/* --- L'anneau --- */
+.home-ring-card {
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.ring-wrap {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* le remplissage commence en haut */
+}
+
+.ring-track {
+  fill: none;
+  stroke: var(--bg);
+  stroke-width: 12;
+}
+
+/* Le trait est "caché" en le décalant de toute sa longueur,
+   puis le JS réduit ce décalage : l'anneau se dessine */
+.ring-value {
+  fill: none;
+  stroke: url(#ring-gradient);
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-dasharray: 326.73;
+  stroke-dashoffset: 326.73;
+  transition: stroke-dashoffset 1.6s var(--silk) 0.3s;
+}
+
+.ring-value.is-over {
+  stroke: var(--danger);
+}
+
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+  font-size: 0.8rem;
+}
+
+.ring-center strong {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.ring-center span {
+  color: var(--text-muted);
+}
+
+/* --- Les chiffres --- */
+.home-figures {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-figure {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px 16px;
+}
+
+.home-figure span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.home-figure strong {
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.home-figure strong.is-over {
+  color: var(--danger);
+}
+
+/* --- Dernières dépenses --- */
+.home-recent {
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+}
+
+.home-recent h3 {
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.home-recent ul {
+  list-style: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.home-recent li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.home-recent .dot {
+  margin-top: 0;
+  width: 10px;
+  height: 10px;
+}
+
+.home-recent-name {
+  flex: 1;
+  overflow: hidden;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-empty {
+  color: var(--text-muted);
+}
+
+/* Animation en boucle arrêtée si elles sont réduites */
+.no-motion .home-kicker {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-kicker {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   TABLEAU DE BORD – RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  .home-guest,
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-ring-card {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 520px) {
+  .home-guest,
+  .home-user {
+    padding: 22px 18px;
+  }
+
+  .home-guest h2 {
+    font-size: 1.5rem;
+  }
+}
+/* =========================================================
+   CORRECTIF TÉLÉPHONE – RIEN NE DOIT DÉPASSER À DROITE
+   ========================================================= */
+/* Sécurité : coupe tout ce qui dépasserait horizontalement
+   ("clip" ne gêne pas le sommaire fixe de la page Conditions) */
+body {
+  overflow-x: clip;
+}
+
+@media (max-width: 520px) {
+  .navbar {
+    gap: 10px;
+    padding: 12px 16px;
+  }
+
+  /* Les liens du menu défilent horizontalement au lieu de s'empiler */
+  .navbar nav {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* cache la barre de défilement */
+  }
+
+  .navbar nav a {
+    flex-shrink: 0;
+  }
+
+  /* "Bonjour, Prénom" et "Déconnexion" passent à la ligne si besoin */
+  .nav-auth {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .nav-user {
+    font-size: 0.9rem;
+  }
+}
+/* =========================================================
+   PIED DE PAGE
+   ========================================================= */
+@keyframes footerShine {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+@keyframes arrowHop {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+.site-footer {
+  position: relative;
+  margin-top: 64px;
+  padding: 48px 24px 24px;
+  border-top: 1px solid var(--border);
+  background: rgba(8, 14, 30, 0.85);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--silk), transform 0.8s var(--silk);
+}
+
+.site-footer.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Reflet lumineux qui parcourt la ligne du haut */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), transparent);
+  background-size: 200% 100%;
+  animation: footerShine 6s linear infinite;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Les colonnes apparaissent l'une après l'autre */
+.footer-inner > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s var(--silk), transform 0.6s var(--silk);
+}
+
+.site-footer.visible .footer-inner > * {
+  opacity: 1;
+  transform: none;
+}
+
+.site-footer.visible .footer-inner > :nth-child(2) { transition-delay: 0.10s; }
+.site-footer.visible .footer-inner > :nth-child(3) { transition-delay: 0.20s; }
+.site-footer.visible .footer-inner > :nth-child(4) { transition-delay: 0.30s; }
+
+.footer-brand p {
+  max-width: 280px;
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.footer-col h4 {
+  margin-bottom: 14px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Soulignement qui se dessine au survol */
+.footer-col a {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: color 0.3s, background-size 0.4s var(--silk);
+}
+
+.footer-col a:hover {
+  color: var(--text);
+  background-size: 100% 1px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 1100px;
+  margin: 36px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.to-top:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.to-top-arrow {
+  display: inline-block;
+}
+
+/* La flèche sautille au survol */
+.to-top:hover .to-top-arrow {
+  animation: arrowHop 0.8s ease-in-out infinite;
+}
+
+/* Animations en boucle arrêtées si elles sont réduites */
+.no-motion .site-footer::before,
+.no-motion .to-top:hover .to-top-arrow {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer::before,
+  .to-top:hover .to-top-arrow {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   PIED DE PAGE – RESPONSIVE
+   ========================================================= */
+@media (max-width: 860px) {
+  .footer-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1; /* le logo prend toute la largeur */
+  }
+}
+
+@media (max-width: 520px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
