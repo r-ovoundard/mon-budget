@@ -328,7 +328,7 @@ renderers.push(() => {
 async function init() {
   const user = await getCurrentUser();
   if (!user) {
-    window.location.replace('connexion.html'); // page réservée aux utilisateurs connectés
+    redirectToLogin(); // page réservée aux utilisateurs connectés
     return;
   }
 

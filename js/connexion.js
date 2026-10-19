@@ -113,7 +113,7 @@ loginForm.addEventListener('submit', async (event) => {
 
     loginBtn.classList.replace('is-loading', 'is-success');
     await wait(900); // le temps de voir la coche se dessiner
-    window.location.href = 'index.html';
+        window.location.href = getReturnPage();
   } catch (error) {
     loginBtn.classList.remove('is-loading');
     loginAlert.textContent = error.message;
@@ -135,5 +135,5 @@ document.getElementById('forgot-link').addEventListener('click', (event) => {
    ========================================================= */
 // On attend la réponse du serveur avant de décider
 getCurrentUser().then((user) => {
-  if (user) window.location.replace('index.html');
+  if (user) window.location.replace(getReturnPage());
 });

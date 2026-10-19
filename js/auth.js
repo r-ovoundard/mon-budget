@@ -79,6 +79,23 @@ async function logoutUser() {
 }
 
 /* =========================================================
+   REDIRECTIONS
+   ========================================================= */
+
+// Envoie vers la page Connexion en se souvenant de la page demandée
+function redirectToLogin() {
+  const page = window.location.pathname.split('/').pop() || 'index.html';
+  window.location.replace(`connexion.html?retour=${encodeURIComponent(page)}`);
+}
+
+// Page où renvoyer l'utilisateur après la connexion.
+// Seuls les noms de pages du site sont acceptés (ex : "stats.html") :
+// un lien piégé ne peut pas envoyer l'utilisateur vers un autre site.
+function getReturnPage() {
+  const target = new URLSearchParams(window.location.search).get('retour');
+  return target && /^[a-z-]+\.html$/.test(target) ? target : 'index.html';
+}
+/* =========================================================
    MENU : "Bonjour, Prénom" + Déconnexion quand on est connecté
    ========================================================= */
 async function renderAuthNav() {

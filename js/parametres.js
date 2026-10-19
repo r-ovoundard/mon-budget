@@ -255,7 +255,7 @@ confirmDialog.addEventListener('close', async () => {
    PAGE RÉSERVÉE + PARAMÈTRES DU SERVEUR
    ========================================================= */
 getCurrentUser().then((user) => {
-  if (!user) window.location.replace('connexion.html');
+  if (!user) redirectToLogin();
 });
 
 // Quand les paramètres du serveur arrivent, on remplit les champs avec

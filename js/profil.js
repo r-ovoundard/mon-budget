@@ -115,7 +115,7 @@ window.addEventListener('resize', () => moveIndicator(document.querySelector('.t
 async function initProfile() {
   const user = await getCurrentUser();
   if (!user) {
-    window.location.replace('connexion.html');
+    redirectToLogin();
     return;
   }
 
