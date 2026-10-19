@@ -4240,3 +4240,299 @@ body {
   height: 75%;
   animation: waveMove 9s linear infinite reverse; /* sens inverse : effet de houle */
 }
+/* =========================================================
+   PAGE CONTACT – CARTE QUI SE DÉPLIE COMME UNE LETTRE
+   ========================================================= */
+@keyframes letterOpen {
+  from { opacity: 0; transform: perspective(900px) rotateX(-14deg) translateY(-12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.contact-card {
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--card);
+  transform-origin: top center;
+  animation: letterOpen 0.9s var(--silk) 0.2s backwards;
+}
+
+/* =========================================================
+   PAGE CONTACT – CHAMPS "LIGNE" AVEC TRAIT QUI PART DU CENTRE
+   ========================================================= */
+.cfield {
+  margin-bottom: 24px;
+}
+
+.cfield label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: color 0.3s var(--silk);
+}
+
+.cfield input,
+.cfield textarea {
+  width: 100%;
+  padding: 10px 2px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+.cfield textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+/* Le trait lumineux, posé sur la ligne du champ */
+.cfield-line {
+  display: block;
+  height: 2px;
+  margin-top: -1px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transform: scaleX(0);
+  transform-origin: center; /* il grandit depuis le milieu */
+  transition: transform 0.5s var(--silk);
+}
+
+.cfield:focus-within label {
+  color: var(--accent);
+}
+
+.cfield:focus-within .cfield-line {
+  transform: scaleX(1);
+}
+
+/* Champ en erreur : trait rouge et petit tremblement */
+.cfield.invalid {
+  animation: shake 0.4s var(--silk);
+}
+
+.cfield.invalid label {
+  color: var(--danger);
+}
+
+.cfield.invalid .cfield-line {
+  background: var(--danger);
+  transform: scaleX(1);
+}
+
+/* =========================================================
+   PAGE CONTACT – PASTILLES DU SUJET AVEC ONDE AU CLIC
+   ========================================================= */
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.chips-label {
+  width: 100%;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.chip {
+  position: relative;
+  overflow: hidden; /* l'onde reste à l'intérieur de la pastille */
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip span {
+  display: inline-block;
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: color 0.3s, border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.4s var(--spring);
+}
+
+.chip:hover span {
+  transform: translateY(-2px);
+}
+
+.chip input:checked + span {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 6px 18px rgba(124, 92, 255, 0.35);
+  color: #fff;
+}
+
+.chip input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* L'onde créée par le JS à l'endroit du clic */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  transform: scale(0);
+  animation: ripple 0.6s var(--silk) forwards;
+}
+
+/* =========================================================
+   PAGE CONTACT – MINI-ANNEAU QUI COMPTE LES CARACTÈRES
+   ========================================================= */
+.char-counter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter-ring {
+  width: 22px;
+  height: 22px;
+  transform: rotate(-90deg);
+}
+
+.counter-track {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 4;
+}
+
+.counter-value {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 94.25;  /* périmètre : 2 × π × 15 */
+  stroke-dashoffset: 94.25;
+  transition: stroke-dashoffset 0.3s var(--silk), stroke 0.3s;
+}
+
+.char-counter.warn .counter-value {
+  stroke: #ffb547;
+}
+
+.char-counter.limit {
+  color: var(--danger);
+}
+
+.char-counter.limit .counter-value {
+  stroke: var(--danger);
+}
+
+/* Le champ piège est envoyé hors de l'écran */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* =========================================================
+   PAGE CONTACT – BOUTON MAGNÉTIQUE
+   (le JS le fait suivre légèrement la souris)
+   ========================================================= */
+.btn-magnetic {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 10px 26px rgba(124, 92, 255, 0.35);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.25s var(--silk), box-shadow 0.3s var(--silk);
+}
+
+.btn-magnetic:hover {
+  box-shadow: 0 14px 34px rgba(124, 92, 255, 0.5);
+}
+
+.btn-magnetic:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.plane-icon {
+  display: inline-block;
+  transition: transform 0.4s var(--spring);
+}
+
+.btn-magnetic:hover .plane-icon {
+  transform: translate(3px, -3px) rotate(-10deg);
+}
+
+/* =========================================================
+   PAGE CONTACT – CARTE DE REMERCIEMENT
+   ========================================================= */
+@keyframes thanksUnfold {
+  from { opacity: 0; transform: perspective(600px) rotateX(-70deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes mailBounce {
+  0%   { transform: scale(0) rotate(-20deg); }
+  60%  { transform: scale(1.2) rotate(8deg); }
+  100% { transform: none; }
+}
+
+.contact-success {
+  padding: 30px 10px;
+  text-align: center;
+  transform-origin: top center;
+}
+
+.contact-success:not([hidden]) {
+  animation: thanksUnfold 0.8s var(--spring);
+}
+
+.success-icon {
+  display: inline-block;
+  font-size: 3rem;
+  animation: mailBounce 1s var(--spring) 0.3s both;
+}
+
+.contact-success h2 {
+  margin: 12px 0 8px;
+}
+
+.contact-success p {
+  margin-bottom: 20px;
+  color: var(--text-muted);
+}

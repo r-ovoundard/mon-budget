@@ -48,7 +48,71 @@
       </div>
     </section>
 
-    <!-- CONTENU -->
+       <!-- ===== CONTENU ===== -->
+    <div class="contact-layout">
+
+      <!-- Formulaire -->
+      <section class="contact-card">
+        <form id="contact-form" novalidate>
+          <div class="cfield">
+            <label for="contact-name">Votre nom</label>
+            <input type="text" id="contact-name" maxlength="80" autocomplete="name">
+            <span class="cfield-line"></span>
+          </div>
+
+          <div class="cfield">
+            <label for="contact-email">Votre email</label>
+            <input type="email" id="contact-email" autocomplete="email">
+            <span class="cfield-line"></span>
+          </div>
+
+          <div class="chips" role="radiogroup" aria-labelledby="subject-label">
+            <span class="chips-label" id="subject-label">Sujet</span>
+            <label class="chip"><input type="radio" name="subject" value="question" checked><span>❓ Question</span></label>
+            <label class="chip"><input type="radio" name="subject" value="bug"><span>🐞 Bug</span></label>
+            <label class="chip"><input type="radio" name="subject" value="idee"><span>💡 Idée</span></label>
+            <label class="chip"><input type="radio" name="subject" value="autre"><span>✉️ Autre</span></label>
+          </div>
+
+          <div class="cfield">
+            <label for="contact-message">Votre message</label>
+            <textarea id="contact-message" rows="6" maxlength="1000"></textarea>
+            <span class="cfield-line"></span>
+            <div class="char-counter" id="char-counter">
+              <svg class="counter-ring" viewBox="0 0 36 36" aria-hidden="true">
+                <circle class="counter-track" cx="18" cy="18" r="15"/>
+                <circle class="counter-value" id="counter-value" cx="18" cy="18" r="15"/>
+              </svg>
+              <span id="counter-text">0 / 1000</span>
+            </div>
+          </div>
+
+          <!-- Piège anti-robots : caché aux humains, les robots le remplissent -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="contact-website">Ne pas remplir ce champ</label>
+            <input type="text" id="contact-website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <p class="pform-error" id="contact-error" role="alert"></p>
+
+          <button type="submit" class="btn-magnetic" id="contact-btn">
+            <span>Envoyer le message</span>
+            <span class="plane-icon" aria-hidden="true">✈️</span>
+          </button>
+        </form>
+
+        <!-- Carte de remerciement, affichée après l'envoi -->
+        <div class="contact-success" id="contact-success" hidden>
+          <span class="success-icon" aria-hidden="true">📬</span>
+          <h2>Message envoyé !</h2>
+          <p>Merci <span id="success-name"></span>, nous vous répondrons très vite.</p>
+          <button type="button" class="btn-soft" id="contact-again">Envoyer un autre message</button>
+        </div>
+      </section>
+
+      <!-- INFOS -->
+
+    </div>
 
   </main>
 
