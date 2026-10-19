@@ -137,3 +137,18 @@ document.getElementById('forgot-link').addEventListener('click', (event) => {
 getCurrentUser().then((user) => {
   if (user) window.location.replace(getReturnPage());
 });
+/* =========================================================
+   MESSAGE SELON LA PAGE DEMANDÉE
+   ========================================================= */
+const PAGE_NAMES = {
+  'depenses.html': 'vos dépenses',
+  'stats.html': 'vos statistiques',
+  'parametres.html': 'vos paramètres',
+  'profil.html': 'votre profil',
+};
+
+const wantedPage = new URLSearchParams(window.location.search).get('retour');
+if (PAGE_NAMES[wantedPage]) {
+  loginAlert.classList.add('info');
+  loginAlert.textContent = `Connectez-vous pour accéder à ${PAGE_NAMES[wantedPage]}.`;
+}

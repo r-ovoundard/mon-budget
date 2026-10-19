@@ -96,12 +96,31 @@ function getReturnPage() {
   return target && /^[a-z-]+\.html$/.test(target) ? target : 'index.html';
 }
 /* =========================================================
+   CADENAS SUR LES PAGES RÉSERVÉES (quand on est déconnecté)
+   ========================================================= */
+const PROTECTED_PAGES = ['depenses.html', 'stats.html', 'parametres.html', 'profil.html'];
+
+function lockProtectedLinks() {
+  document.querySelectorAll('.navbar nav a').forEach((link) => {
+    if (PROTECTED_PAGES.includes(link.getAttribute('href'))) {
+      link.classList.add('nav-locked');
+      link.title = 'Connexion requise'; // petite bulle au survol
+    }
+  });
+}
+/* =========================================================
    MENU : "Bonjour, Prénom" + Déconnexion quand on est connecté
    ========================================================= */
 async function renderAuthNav() {
   const user = await getCurrentUser();
   const navAuth = document.querySelector('.nav-auth');
-  if (!user || !navAuth) return;
+   if (!navAuth) return;
+
+  // Déconnecté : on garde Connexion / Inscription et on pose les cadenas
+  if (!user) {
+    lockProtectedLinks();
+    return;
+  }
 
   const firstName = user.firstName;
 

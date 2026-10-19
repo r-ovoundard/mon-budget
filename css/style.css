@@ -3351,3 +3351,31 @@ input[type="month"] {
     display: none;
   }
 }
+/* =========================================================
+   MENU – CADENAS SUR LES PAGES RÉSERVÉES
+   ========================================================= */
+@keyframes lockSwing {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-18deg); }
+  75%      { transform: rotate(18deg); }
+}
+
+.navbar nav a.nav-locked {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-locked::after {
+  content: "🔒";
+  display: inline-block;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  transform-origin: top center; /* se balance comme un vrai cadenas accroché */
+  transition: opacity 0.3s var(--silk);
+}
+
+.nav-locked:hover::after {
+  opacity: 1;
+  animation: lockSwing 0.6s var(--spring);
+}
