@@ -3293,3 +3293,61 @@ input[type="month"] {
 .modal-input {
   margin-bottom: 4px;
 }
+/* =========================================================
+   PAGE PROFIL – RESPONSIVE
+   ========================================================= */
+@media (max-width: 760px) {
+  .profile-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 28px 20px;
+  }
+
+  .hero-info h1 {
+    text-align: center;
+    font-size: 1.6rem;
+  }
+
+  .profile-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .pgrid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-tabs {
+    padding: 18px 14px;
+  }
+
+  .tab {
+    flex: 0 0 auto; /* les onglets défilent horizontalement si besoin */
+  }
+}
+
+/* =========================================================
+   PAGE PROFIL – ANIMATIONS EN BOUCLE ARRÊTÉES
+   ========================================================= */
+.no-motion .hero-glow,
+.no-motion .hero-avatar-wrap::before,
+.no-motion .hero-avatar-wrap::after {
+  animation: none !important;
+}
+
+.no-motion .hero-avatar-wrap::before,
+.no-motion .hero-avatar-wrap::after {
+  display: none; /* sans mouvement, les lunes n'ont plus de sens */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow,
+  .hero-avatar-wrap::before,
+  .hero-avatar-wrap::after {
+    animation: none !important;
+  }
+
+  .hero-avatar-wrap::before,
+  .hero-avatar-wrap::after {
+    display: none;
+  }
+}
