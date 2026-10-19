@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditions d'utilisation – MonBudget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/settings.js"></script>
+  <script src="js/auth.js"></script>
+</head>
+<body>
+
+  <!-- Barre de progression de lecture -->
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header class="navbar">
+    <a href="index.html" class="logo">💸 Mon<span>Budget</span></a>
+    <nav>
+      <a href="index.html">Tableau de bord</a>
+      <a href="depenses.html">Dépenses</a>
+      <a href="stats.html">Statistiques</a>
+      <a href="parametres.html">Paramètres</a>
+    </nav>
+    <div class="nav-auth">
+      <a href="connexion.html" class="btn-ghost">Connexion</a>
+      <a href="inscription.html" class="btn-primary">Inscription</a>
+    </div>
+  </header>
+
+  <main class="container legal-page">
+
+    <!-- ===== EN-TÊTE ===== -->
+    <header class="legal-header">
+      <h1>Conditions d'utilisation 📜</h1>
+      <p class="legal-date">Dernière mise à jour : 19 octobre 2026</p>
+      <p class="legal-notice">
+        ℹ️ MonBudget est un <strong>projet pédagogique</strong>. Ce texte est un exemple
+        et n'a pas de valeur juridique.
+      </p>
+    </header>
+
+    <div class="legal-layout">
+
+      <!-- ===== SOMMAIRE ===== -->
+      <aside class="toc" aria-label="Sommaire">
+        <p class="toc-title">Sommaire</p>
+        <ol>
+          <li><a href="#objet">1. Objet</a></li>
+          <li><a href="#acces">2. Accès au service</a></li>
+          <li><a href="#compte">3. Votre compte</a></li>
+          <li><a href="#donnees">4. Données collectées</a></li>
+          <li><a href="#droits">5. Vos droits</a></li>
+          <li><a href="#securite">6. Sécurité</a></li>
+          <li><a href="#responsabilite">7. Responsabilité</a></li>
+          <li><a href="#modifications">8. Modifications</a></li>
+          <li><a href="#contact">9. Contact</a></li>
+        </ol>
+      </aside>
+
+      <!-- ===== CONTENU ===== -->
+      <article class="legal-content">
+
+        <section id="objet">
+          <h2><span class="legal-num">1</span> Objet</h2>
+          <p>
+            Les présentes conditions encadrent l'utilisation de MonBudget, une application web
+            qui aide les étudiants à suivre leurs dépenses, à les classer par catégorie et à
+            les comparer à un budget mensuel.
+          </p>
+          <p>En créant un compte, vous acceptez ces conditions.</p>
+        </section>
+
+        <section id="acces">
+          <h2><span class="legal-num">2</span> Accès au service</h2>
+          <p>
+            Le Tableau de bord et la présente page sont accessibles à tous. Les pages Dépenses,
+            Statistiques, Paramètres et Profil nécessitent un compte et une connexion.
+          </p>
+          <p>Le service est gratuit. Il peut être interrompu pour maintenance ou évolution.</p>
+        </section>
+
+        <section id="compte">
+          <h2><span class="legal-num">3</span> Votre compte</h2>
+          <ul>
+            <li>Vous vous engagez à fournir des informations exactes lors de l'inscription.</li>
+            <li>Votre mot de passe est personnel : ne le communiquez à personne.</li>
+            <li>Vous êtes responsable de ce qui est fait depuis votre compte.</li>
+            <li>Pensez à vous déconnecter sur un ordinateur partagé.</li>
+          </ul>
+        </section>
+
+        <section id="donnees">
+          <h2><span class="legal-num">4</span> Données collectées</h2>
+          <p>MonBudget enregistre uniquement les informations nécessaires à son fonctionnement :</p>
+          <ul>
+            <li><strong>Identité</strong> : prénom, nom, adresse email, téléphone et adresse ;</li>
+            <li><strong>Dépenses</strong> : montant, catégorie, date et description ;</li>
+            <li><strong>Préférences</strong> : budget mensuel, répartition, couleurs et animations.</li>
+          </ul>
+          <p>Ces données ne sont jamais vendues ni transmises à des tiers.</p>
+        </section>
+
+        <section id="droits">
+          <h2><span class="legal-num">5</span> Vos droits</h2>
+          <p>Vous gardez le contrôle de vos données, directement depuis l'application :</p>
+          <ul>
+            <li><strong>Consulter et corriger</strong> vos informations : page <a href="profil.html" class="auth-link">Profil</a>, onglet Informations ;</li>
+            <li><strong>Récupérer</strong> vos données : page <a href="parametres.html" class="auth-link">Paramètres</a>, bouton « Exporter une sauvegarde » ;</li>
+            <li><strong>Effacer</strong> vos dépenses : page Paramètres, bouton « Tout effacer » ;</li>
+            <li><strong>Supprimer</strong> votre compte : page Profil, onglet Zone de danger. Toutes vos données sont alors supprimées définitivement.</li>
+          </ul>
+        </section>
+
+        <section id="securite">
+          <h2><span class="legal-num">6</span> Sécurité</h2>
+          <ul>
+            <li>Les mots de passe ne sont jamais enregistrés en clair : seule une empreinte sécurisée est conservée.</li>
+            <li>Chaque utilisateur n'a accès qu'à ses propres données.</li>
+            <li>Les actions sensibles (changer de mot de passe, supprimer le compte) demandent votre mot de passe actuel.</li>
+          </ul>
+        </section>
+
+        <section id="responsabilite">
+          <h2><span class="legal-num">7</span> Responsabilité</h2>
+          <p>
+            MonBudget est un outil d'aide à l'organisation. Les répartitions et conseils proposés
+            sont indicatifs et ne constituent pas un conseil financier professionnel.
+          </p>
+        </section>
+
+        <section id="modifications">
+          <h2><span class="legal-num">8</span> Modifications</h2>
+          <p>
+            Ces conditions peuvent évoluer. La date de dernière mise à jour est indiquée en haut
+            de cette page.
+          </p>
+        </section>
+
+        <section id="contact">
+          <h2><span class="legal-num">9</span> Contact</h2>
+          <p>
+            Pour toute question, écrivez à l'adresse de contact du projet
+            (exemple : <strong>contact@monbudget.fr</strong>).
+          </p>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <script src="js/conditions.js"></script>
+
+</body>
+</html>

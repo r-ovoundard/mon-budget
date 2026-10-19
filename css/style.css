@@ -3431,3 +3431,188 @@ input[type="month"] {
 .back-btn:hover .back-arrow {
   transform: translateX(-4px);
 }
+/* =========================================================
+   PAGE CONDITIONS – BARRE DE LECTURE
+   --progress (de 0 à 1) est mis à jour par le JS
+   ========================================================= */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 10px var(--accent-2);
+  transform-origin: left;
+  transform: scaleX(var(--progress, 0));
+}
+
+/* Défilement doux quand on clique dans le sommaire */
+html:has(.legal-page) {
+  scroll-behavior: smooth;
+}
+
+/* =========================================================
+   PAGE CONDITIONS – EN-TÊTE
+   ========================================================= */
+.legal-header {
+  margin-bottom: 32px;
+  animation: heroRise 0.8s var(--silk) backwards;
+}
+
+.legal-header h1 {
+  text-align: left;
+}
+
+.legal-date {
+  margin-top: 6px;
+  color: var(--text-muted);
+}
+
+.legal-notice {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border: 1px solid rgba(79, 140, 255, 0.4);
+  border-radius: 12px;
+  background: rgba(79, 140, 255, 0.08);
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   PAGE CONDITIONS – SOMMAIRE FIXE + CONTENU
+   ========================================================= */
+.legal-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* "sticky" : le sommaire reste visible pendant qu'on fait défiler */
+.toc {
+  position: sticky;
+  top: 24px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  animation: heroRise 0.8s var(--silk) 0.15s backwards;
+}
+
+.toc-title {
+  margin-bottom: 10px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.toc ol {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toc a {
+  display: block;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.3s, background 0.3s, border-color 0.3s, padding-left 0.4s var(--spring);
+}
+
+.toc a:hover {
+  color: var(--text);
+}
+
+/* La partie en cours de lecture s'allume */
+.toc a.active {
+  padding-left: 16px;
+  border-left-color: var(--accent);
+  background: rgba(79, 140, 255, 0.1);
+  color: var(--text);
+}
+
+.legal-content section {
+  margin-bottom: 20px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  scroll-margin-top: 24px; /* laisse un peu d'air en haut quand on y saute */
+}
+
+/* Apparition au défilement (seulement si le JS est chargé) */
+.legal-content.reveal-ready section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--silk), transform 0.7s var(--silk);
+}
+
+.legal-content.reveal-ready section.visible {
+  opacity: 1;
+  transform: none;
+}
+
+.legal-content h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 1.2rem;
+}
+
+.legal-num {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.legal-content p,
+.legal-content li {
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.legal-content p + p {
+  margin-top: 10px;
+}
+
+.legal-content ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 0 20px;
+}
+
+.legal-content strong {
+  color: var(--text);
+}
+
+/* =========================================================
+   PAGE CONDITIONS – RESPONSIVE
+   ========================================================= */
+@media (max-width: 860px) {
+  .legal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .toc {
+    position: static; /* sur téléphone, le sommaire reste en haut */
+  }
+
+  .legal-content section {
+    padding: 22px 18px;
+  }
+}

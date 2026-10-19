@@ -168,7 +168,10 @@ function goBack() {
 
   // Page précédente du site (hors Connexion/Inscription) : on y retourne.
   // Sinon : tableau de bord, pour ne jamais sortir de l'application.
-  if (previousPage && !PAGES_WITHOUT_BACK.slice(1).includes(previousPage)) {
+  
+    // On revient en arrière, sauf vers Connexion (elle renverrait ici : boucle),
+  // et seulement si l'onglet a bien une page précédente
+  if (previousPage && previousPage !== 'connexion.html' && window.history.length > 1) {
     window.history.back();
   } else {
     window.location.href = 'index.html';
