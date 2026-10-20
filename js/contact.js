@@ -245,3 +245,22 @@ document.getElementById('contact-again').addEventListener('click', () => {
   contactForm.hidden = false;
   contactMessageInput.focus();
 });
+/* =========================================================
+   MOT DE PASSE OUBLIÉ : DEMANDE DÉJÀ RÉDIGÉE
+   (quand on arrive depuis le lien de la page Connexion)
+   ========================================================= */
+const contactParams = new URLSearchParams(window.location.search);
+
+if (contactParams.get('motif') === 'mot-de-passe') {
+  contactForm.querySelector('input[name="subject"][value="autre"]').checked = true;
+
+  contactMessageInput.value =
+    "Bonjour, j'ai oublié le mot de passe de mon compte MonBudget. "
+    + "Pouvez-vous m'aider à le réinitialiser ? Merci.";
+  updateCounter();
+
+  const email = contactParams.get('email');
+  if (email) contactEmailInput.value = email;
+
+  contactNameInput.focus(); // il ne reste qu'à écrire son nom
+}

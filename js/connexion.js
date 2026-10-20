@@ -123,12 +123,17 @@ loginForm.addEventListener('submit', async (event) => {
 
 /* =========================================================
    MOT DE PASSE OUBLIÉ
-   Sans serveur, impossible d'envoyer un email de réinitialisation.
+   Direction la page Contact, avec la demande déjà rédigée.
    ========================================================= */
 document.getElementById('forgot-link').addEventListener('click', (event) => {
   event.preventDefault();
-  loginAlert.classList.add('info');
-  loginAlert.textContent = 'La réinitialisation arrivera avec la version serveur. En attendant, créez un nouveau compte.';
+
+  // On emmène l'email déjà tapé jusqu'à la page Contact
+  const params = new URLSearchParams({ motif: 'mot-de-passe' });
+  const email = emailInput.value.trim();
+  if (email) params.set('email', email);
+
+  window.location.href = `contact.html?${params}`;
 });
 /* =========================================================
    DÉJÀ CONNECTÉ : direction le tableau de bord
