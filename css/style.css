@@ -4738,3 +4738,19 @@ body {
     animation: none !important;
   }
 }
+/* =========================================================
+   FENÊTRE DE DÉCONNEXION – LA MAIN QUI FAIT COUCOU
+   ========================================================= */
+@keyframes handWave {
+  0%, 100% { transform: rotate(0deg); }
+  20%      { transform: rotate(18deg); }
+  40%      { transform: rotate(-12deg); }
+  60%      { transform: rotate(14deg); }
+  80%      { transform: rotate(-6deg); }
+}
+
+.logout-wave {
+  display: inline-block;
+  transform-origin: 70% 70%; /* pivote depuis le poignet */
+  animation: handWave 1.2s ease-in-out 0.2s;
+}

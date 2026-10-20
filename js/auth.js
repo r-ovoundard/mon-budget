@@ -109,6 +109,43 @@ function lockProtectedLinks() {
   });
 }
 /* =========================================================
+   CONFIRMATION AVANT LA DÉCONNEXION
+   Renvoie une promesse : true si l'utilisateur confirme, false sinon.
+   ========================================================= */
+function confirmLogout() {
+  return new Promise((resolve) => {
+    let dialog = document.getElementById('logout-dialog');
+
+    // La fenêtre est créée une seule fois, puis réutilisée
+    if (!dialog) {
+      dialog = document.createElement('dialog');
+      dialog.id = 'logout-dialog';
+      dialog.className = 'modal';
+      dialog.innerHTML = `
+        <form method="dialog">
+          <span class="modal-icon logout-wave" aria-hidden="true">👋</span>
+          <h3>Se déconnecter ?</h3>
+          <p>Vous devrez saisir à nouveau votre email et votre mot de passe pour revenir.</p>
+          <div class="modal-actions">
+            <button value="cancel" class="btn-soft">Rester connecté</button>
+            <button value="confirm" class="btn-shine">Se déconnecter</button>
+          </div>
+        </form>
+      `;
+      document.body.append(dialog);
+
+      // Un clic sur le fond flouté = "Rester connecté"
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close('cancel');
+      });
+    }
+
+    dialog.returnValue = ''; // oublie la réponse précédente
+    dialog.addEventListener('close', () => resolve(dialog.returnValue === 'confirm'), { once: true });
+    dialog.showModal();
+  });
+}
+/* =========================================================
    MENU : "Bonjour, Prénom" + Déconnexion quand on est connecté
    ========================================================= */
 async function renderAuthNav() {
@@ -138,7 +175,8 @@ async function renderAuthNav() {
   logoutBtn.type = 'button';
   logoutBtn.className = 'btn-ghost';
   logoutBtn.textContent = 'Déconnexion';
-  logoutBtn.addEventListener('click', async () => {
+   logoutBtn.addEventListener('click', async () => {
+    if (!(await confirmLogout())) return; // "Rester connecté" : on ne fait rien
     await logoutUser();
     window.location.href = 'connexion.html';
   });
@@ -266,8 +304,9 @@ async function renderFooter() {
   // "Déconnexion" dans le pied de page
   const logoutLink = footer.querySelector('[data-action="logout"]');
   if (logoutLink) {
-    logoutLink.addEventListener('click', async (event) => {
+      logoutLink.addEventListener('click', async (event) => {
       event.preventDefault();
+      if (!(await confirmLogout())) return;
       await logoutUser();
       window.location.href = 'connexion.html';
     });
